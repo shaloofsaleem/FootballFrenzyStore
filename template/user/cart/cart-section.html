@@ -1,0 +1,189 @@
+{% extends "user/base-layout.html" %}
+{% load static %}
+
+{% block content %}
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Cart</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="{% url 'product:all_product' %}">Shop</a></li>
+                                <li class="active" aria-current="page">Cart</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+<!-- ...:::: Start Cart Section:::... -->
+<div class="cart-section">
+    <!-- Start Cart Table -->
+    <div class="cart-table-wrapper" data-aos="fade-up" data-aos-delay="0">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    {% if status == True %}
+                    <div class="table_desc">
+                        <div class="table_page table-responsive" id="filter">
+                            <table id="cartTable">
+                                <!-- Start Cart Table Head -->
+                                <thead>
+                                    <tr>
+                                        <th class="product_remove">Delete</th>
+                                        <th class="product_thumb">Image</th>
+                                        <th class="product_name">Product</th>
+                                        <th class="product-price">Unit Price</th>
+                                        <th class="product-price">Offer Price</th>
+                                        <th class="product-price">Size</th>
+                                        <th class="product_quantity">Quantity</th>
+                                        <th class="product_total">Total</th>
+                                    </tr>
+                                </thead> <!-- End Cart Table Head -->
+                                {% include 'user/cart/cart-table.html' %}
+                            </table>
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- ...::::Start About Us Center Section:::... -->
+                    <div class="empty-cart-section section-fluid mb-4">
+                        <div class="emptycart-wrapper">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12 col-md-10 offset-md-1 col-xl-6 offset-xl-3">
+                                        <div class="emptycart-content text-center">
+                                            <div class="image">
+                                                <img class="img-fluid" src="{% static 'user/images/emprt-cart/empty-cart.png'%}"
+                                                    alt="">
+                                            </div>
+                                            <h4 class="title">Your Cart is Empty</h4>
+                                            <h6 class="sub-title">Sorry Mate... No item Found inside your cart!</h6>
+                                            <a href="{% url 'product:landing_page'%}" class="btn btn-lg btn-golden">Continue
+                                                Shopping</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- ...::::End  About Us Center Section:::... -->
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div> <!-- End Cart Table -->
+    {% if status == True %}
+    <!-- Start Coupon Start -->
+    <div class="coupon_area">
+        <div class="container">
+            <div class="row">
+                {% include 'user/cart/coupen.html' %}
+                {% include 'user/cart/cart-totel.html' %}
+
+            </div>
+        </div>
+    </div>
+    {% endif %} <!-- End Coupon Start -->
+</div> <!-- ...:::: End Cart Section:::... -->
+{% endblock %}
+
+
+{% block script %}
+
+<script>
+    function quatity(key) {
+        var qty = $('#cart-' + key + ' #qty option:selected').val();
+        var size = $('#cart-' + key + ' #size option:selected').val();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cart:price_change' %}",
+            data: {
+                qty,
+                key,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+            },
+            success: function (res) {
+                $("#sub_totel_price-" + key).text(res.data);
+                $('.cart-count-lenght').text(res.totel_count_cart);
+                $('.totel-price').text(res.totel_price);
+                $('.totel-savings').text(res.savings);
+                // $("#cartTable #cart-" + key +'#sub_totel_price').text(res.data);
+                // $('#sub_totel_price').text(res.data);
+                // $("#qty_div").html(res.template);
+                console.log('success')
+            },
+            failure: function () {
+            }
+        });
+    }
+
+
+    function size_select(id) {
+        var size = $('#cart-' + id + ' #size option:selected').val();
+        console.log(size)
+        console.log(id)
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cart:size_change' %}",
+            data: {
+                id,
+                size,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+            },
+            success: function (res) {
+                // $('#ta').text(res.data);
+                $("#qty_div-" + id).html(res.data);
+                console.log('success')
+            },
+            failure: function () {
+            }
+        });
+    }
+
+    function delete_cart_items(cart_id) {
+        console.log(cart_id)
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cart:deleted_cart_items' %}",
+            data: {
+                cart_id,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+            },
+            success: function (res) {
+                $("#cartTable #cart-" + cart_id).remove();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Delete Success fully',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                $('.cart-count-lenght').text(res.length_product);
+                $('.totel-price').text(res.totel_price);
+                $('.totel-savings').text(res.savings);
+            },
+            failure: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Sorry ... Delete Not Success fully,something error',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        });
+    }
+
+</script>
+
+
+
+{% endblock %}

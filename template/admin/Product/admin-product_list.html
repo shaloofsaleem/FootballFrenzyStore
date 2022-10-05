@@ -1,0 +1,76 @@
+{% extends 'admin/admin-base.html' %}
+    {% load static %}
+    {% block title %}
+    Product
+  {% endblock title %}
+    {% block content  %}
+    
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4>Latest Posts</h4>
+          <div class="card-header-action">
+            <a href="{% url 'product_add' %}" class="btn btn-primary">Add Product</a>
+          </div>
+        </div>
+        <div class="card-body ">
+          <div class="table-responsive">
+            <table class="table table-striped text-center">
+              <thead>
+                <tr class="">
+                  <th>Product Name</th>
+                  <th>Brand</th>
+                  <th>Category</th>
+                  <th>Stock</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody > 
+                {% for p in product %}                        
+                <tr>
+                  
+                  <td>
+                    {{p.product_name}}
+                   </td>
+                   
+                  <td>
+                   {{p.product_brand}}
+                  </td>
+                   <td>
+                    {{p.category  }}
+                   </td>
+                   <td>
+                    {{p.product_totel_stoke }}
+                   </td>
+                   <td>
+                    ₹{{p.unit_price }}
+                   </td>
+                   <td>
+                    {% if p.is_active %}
+                        <div class="badge badge-success">{{p.is_active }}</div>
+                        {% else %}
+                        <div class="badge badge-warning">{{p.is_active }}</div>
+                        {% endif %}
+                    </td>
+                  <td>
+                    <a class="btn btn-primary btn-action" href="{% url 'produpdate' p.id %}" data-toggle="tooltip" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                  </td>
+                    <td>
+                      <form action="" method="POST">
+                    <a class="btn btn-danger btn-action" href="{% url 'proddelete' p.id %}" data-toggle="tooltip" title="Delete" ><i class="fas fa-trash"></i></a>
+                      </f>
+                  </td>
+                 
+                </tr>
+                <tr>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}

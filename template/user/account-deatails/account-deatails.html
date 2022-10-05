@@ -1,0 +1,421 @@
+{% extends "user/base-layout.html" %}
+{% load static %}
+
+{% block content %}
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">My Account</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
+                                <li class="active" aria-current="page">My Account</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+<!-- ...:::: Start Account Dashboard Section:::... -->
+<div class="account-dashboard mb-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-3 col-lg-3">
+                <!-- Nav tabs -->
+                <div class="dashboard_tab_button" data-aos="fade-up" data-aos-delay="0">
+                    <ul role="tablist" class="nav flex-column dashboard-list">
+
+                        <li><a href="#profile-Informations" data-bs-toggle="tab"
+                                class="nav-link btn btn-block btn-md btn-black-default-hover active">Profile Informations</a>
+                        </li>
+                        <li><a href="#address" data-bs-toggle="tab"
+                                class="nav-link btn btn-block btn-md btn-black-default-hover">Addresses</a></li>
+                        <li> <a href="{% url 'payment:order_deatails' %}" 
+                                class="nav-link btn btn-block btn-md btn-black-default-hover">Orders</a></li>
+                        <li><a href="#downloads" data-bs-toggle="tab"
+                                class="nav-link btn btn-block btn-md btn-black-default-hover">Downloads</a></li>
+                        <li><a href="{% url 'accounts:logout' %}"
+                                class="nav-link btn btn-block btn-md btn-black-default-hover">logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-9 col-lg-9">
+                <!-- Tab panes -->
+                <div class="tab-content dashboard_content" data-aos="fade-up" data-aos-delay="200">
+
+                    {% include 'user/account-deatails/profile-Informations.html' %}
+
+                    {% include 'user/account-deatails/address.html' %}
+
+                    {% include 'user/account-deatails/order.html' %}
+
+                    {% include 'user/account-deatails/downloads.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Account Dashboard Section:::... -->
+{% endblock %}
+{% block script %}
+
+<script>
+    // user_infermations
+    function edit_enable() {
+        var cells = document.getElementsByClassName('disabled');
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].removeAttribute('disabled');
+        }
+        document.getElementById('submit').style.display = 'block'
+        document.getElementById('edit').style.display = 'none'
+        document.getElementById('cancel').style.display = 'block'
+    }
+    function cancel() {
+        var cells = document.getElementsByClassName('disabled');
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].setAttribute('disabled', '')
+        }
+        document.getElementById('submit').style.display = 'none'
+        document.getElementById('edit').style.display = 'block'
+        document.getElementById('cancel').style.display = 'none'
+    }
+
+    $('#user_infermations').on('submit', function (e) {
+        var gender = $(".gender:checked").val();
+        var first_name = $('#first_name').val();
+        var last_name = $('#last_name').val();
+        var user_id = $('#user_id').val();
+        console.log(gender, first_name, last_name)
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'accounts:user_infermations' %}",
+            data: {
+                user_id,
+                gender,
+                first_name,
+                last_name,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+
+            },
+            beforeSend: function () {
+                document.getElementById('spinner').style.display = 'block'
+                document.getElementById('submit').style.display = 'none'
+            },
+            success: function (res) {
+                document.getElementById('spinner').style.display = 'none'
+                document.getElementById('submit').style.display = 'block'
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Your edit has been saved',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            },
+            failure: function () {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'form conatins error',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        });
+    });
+    // end user_infermations
+
+    // email section 
+
+    function edit_email() {
+        var cells = document.getElementsByClassName('disabled_email');
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].removeAttribute('disabled');
+        }
+        document.getElementById('email_submit').style.display = 'block'
+        document.getElementById('edit_email').style.display = 'none'
+        document.getElementById('cancel_email').style.display = 'block'
+    }
+    function cancel_email() {
+        var cells = document.getElementsByClassName('disabled_email');
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].setAttribute('disabled', '')
+        }
+        document.getElementById('email_submit').style.display = 'none'
+        document.getElementById('edit_email').style.display = 'block'
+        document.getElementById('cancel_email').style.display = 'none'
+    }
+
+    // end email section 
+
+    // phone section 
+    function edit_phone() {
+        var cells = document.getElementsByClassName('disabled_phone');
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].removeAttribute('disabled');
+        }
+        document.getElementById('phone_submit').style.display = 'block'
+        document.getElementById('edit_phone').style.display = 'none'
+        document.getElementById('cancel_phone').style.display = 'block'
+    }
+    function cancel_phone() {
+        var cells = document.getElementsByClassName('disabled_phone');
+        for (var i = 0; i < cells.length; i++) {
+            cells[i].setAttribute('disabled', '')
+        }
+        document.getElementById('phone_submit').style.display = 'none'
+        document.getElementById('edit_phone').style.display = 'block'
+        document.getElementById('cancel_phone').style.display = 'none'
+    }
+    // end phone section
+
+    // add address
+
+    function add_new() {
+        document.getElementById('add_new_form').style.display = 'block'
+        document.getElementById('add_new').style.display = 'none'
+    }
+    function cancel_add_new() {
+        document.getElementById('add_new_form').style.display = 'none'
+        document.getElementById('add_new').style.display = 'block'
+    }
+
+    $('#address').on('submit', function (e) {
+        var user_id = $('#user_id').val();
+        var name = $('#id_name').val();
+        var phone_no = $('#id_phone_no').val();
+        var pincode = $('#id_pincode').val();
+        var locality = $('#id_locality').val();
+        var address = $('#id_address').val();
+        var city_district_town = $('#id_city_district_town').val();
+        var state = $('#state option:selected').val();
+        var landmark = $('#id_landmark').val();
+        var alt_phone_no = $('#id_alt_phone_no').val();
+        var address_type = $(".addresstype:checked").val();
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'accounts:user_address' %}",
+            data: {
+                user_id,
+                name,
+                phone_no,
+                pincode,
+                locality,
+                address,
+                city_district_town,
+                state,
+                landmark,
+                alt_phone_no,
+                address_type,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+
+            },
+            beforeSend: function () {
+                document.getElementById('spinner_address').style.display = 'block'
+                // document.getElementById('save').style.display = 'none'
+                document.getElementById('submit_address').setAttribute('disabled','')
+            },
+            success: function (res) {
+                document.getElementById('spinner_address').style.display = 'none'
+                document.getElementById('submit_address').style.display = 'block'
+                document.getElementById('add_new_form').style.display = 'none'
+                document.getElementById('add_new').style.display = 'block'
+                $('#user_address').html(res.template);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Your address has been saved',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            },
+            failure: function () {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'form conatins error',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        });
+    });
+
+    // delete address 
+
+    function delete_address(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "accounts:delete_address" %}',
+                    data: {
+                        'address_id': id,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        dataType: 'json',
+                    },
+                    success: function (data) {
+                        if (data.data) {
+                            $("#user_address #address-" + id).remove();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Delete Success fully',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        }
+                    },
+                    failure: function () {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: 'form conatins error',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                });
+            }
+        })
+    }
+
+    // delete address
+
+
+    // edit address
+
+    // function edit_address(id) {
+    //     document.getElementById('add_new').style.display = 'none'
+    //     document.getElementById('add_new_form-' + id).style.display = 'block'
+    //     document.getElementById('address-' + id).style.display = 'none'
+    // }
+    // function cancel_address(id) {
+    //     document.getElementById('add_new').style.display = 'block'
+    //     document.getElementById('add_new_form-' + id).style.display = 'none'
+    //     document.getElementById('address-' + id).style.display = 'block'
+    // }
+
+
+    function edit_address(id) {
+    var edit_already_address = document.getElementsByClassName('edit_already_address');
+    for (var i = 0; i < edit_already_address.length; i++) {
+        edit_already_address[i].style.display = 'none';
+    }
+    document.getElementById('add_new').style.display = 'none'
+    document.getElementById('add_new_form').style.display = 'none'
+
+    var address = document.getElementsByClassName('list_address');
+    for (var i = 0; i < address.length; i++) {
+        address[i].style.display = 'block';
+    }
+    document.getElementById('address-' + id).style.display = 'none'
+    document.getElementById('edit_already_address-' + id).style.display = 'block'
+
+}
+function cancel_address(id) {
+    document.getElementById('add_new').style.display = 'block'
+    document.getElementById('edit_already_address-' + id).style.display = 'none'
+    document.getElementById('address-' + id).style.display = 'block'
+}
+
+
+    function edit_form(id) {
+        var name = $('#address_name-'+id).val();
+        var phone_no = $('#address_phone_no-'+id).val();
+        var pincode = $('#address_pincode-'+id).val();
+        var locality = $('#address_locality-'+id).val();
+        var address = $('#address_address-'+id).val();
+        var city_district_town = $('#address_city_district_town-'+id).val();
+        var state = $('#address_state-'+id+' option:selected').val();
+        var landmark = $('#address_landmark-'+id).val();
+        var alt_phone_no = $('#address_alt_phone_no-'+id).val();
+        var address_type = $(".edit_addresstype-"+id+":checked").val();
+        console.log(
+                id,
+                name,
+                phone_no,
+                pincode,
+                locality,
+                address,
+                city_district_town,
+                state,
+                landmark,
+                alt_phone_no,
+                address_type,
+        )
+        $.ajax({
+            type: "POST",
+            url: "{% url 'accounts:edit_address' %}",
+            data: {
+                id,
+                name,
+                phone_no,
+                pincode,
+                locality,
+                address,
+                city_district_town,
+                state,
+                landmark,
+                alt_phone_no,
+                address_type,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+
+            },
+            beforeSend: function () {
+                document.getElementById('spinner_address-'+id).style.display = 'block'
+                document.getElementById('save-'+id).style.display = 'none'
+                document.getElementById('submit_address-'+id).setAttribute('disabled','')
+            },
+            success: function (res) {
+                document.getElementById('spinner_address-'+id).style.display = 'none'
+                document.getElementById('submit_address-'+id).style.display = 'block'
+                document.getElementById('add_new_form-'+id).style.display = 'none'
+                document.getElementById('add_new').style.display = 'block'
+                $('#user_address').html(res.template);
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Your address has been saved',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            },
+            failure: function () {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'form conatins error',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        });
+    }
+
+    
+
+</script>
+
+
+
+{% endblock %}

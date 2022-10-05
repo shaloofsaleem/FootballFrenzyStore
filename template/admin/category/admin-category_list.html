@@ -1,0 +1,64 @@
+{% extends 'admin/admin-base.html' %}
+    {% load static %}
+    {% block title %}
+    Category
+  {% endblock title %}
+    {% block content  %}
+    
+       <p></p>
+       <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h4>Invoices</h4>
+                  <div class="card-header-action">
+                    <a href="{% url 'category_create' %}" class="btn btn-danger">Add Category<i class="fas fa-chevron-right"></i></a>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <div class="table-responsive table-invoice">
+                    <table class="table table-striped">
+                      <tr class="text-center" >
+                        <th>Invoice ID</th>
+                        <th>Category</th>
+                        <th>Parent</th>
+                        <th>Slug</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                      {% for c in category %}
+                      <tr>
+                        <td><a href="#">{{forloop.counter}}</a></td>
+                        <td class="font-weight-600">{{c.category }}</td>
+                        <td class="font-weight-600">{{c.parent }}</td>
+                        <td>{{c.slug}}</td>
+                        <td>{{c.description}}</td>
+                        {% comment %} <td><div class="badge badge-warning">{{c.is_active }}</div></td> {% endcomment %}
+                        <td>
+                        {% if c.is_active %}
+                        <div class="badge badge-success">Active</div>
+                        {% else %}
+                        <div class="badge badge-warning">Inactive</div>
+                        {% endif %}
+
+                        </td>
+                        <td>
+                          {% comment %} <a href="" class="btn btn-primary">Update</a> {% endcomment %}
+                          <a class="btn btn-primary btn-action mr-1" href="{% url 'catupdate' c.id %}" data-toggle="tooltip" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                        </td>
+                        <td>
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <a class="btn btn-danger btn-action mr-1" href="{% url 'catdelete' c.id %}" data-toggle="tooltip" title="Delete"><i class="fas fa-trash"></i></a>
+                            </form>
+                          </td>
+                      </tr>
+                      {% endfor %}  
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+    {% endblock %}

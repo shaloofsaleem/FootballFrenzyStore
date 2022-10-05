@@ -1,0 +1,21 @@
+
+
+    {% for u in data %}
+    <div class="border p-3 mt-3" id="address-{{u.id}}">
+        <a href="javascript:void(0)" class="m-2 float-right" onclick="delete_address({{u.id}})">
+            <p>Delete</p>
+        </a>
+        <a href="javascript:void(0)" ondblclick="edit_address({{u.id}})">
+            <div>
+                <div style="height: 28px;width: 60px; background-color: rgb(193, 184, 184);"
+                    class="text-white rounded text-center font-weight-bold mb-2">
+                    {{u.address_type}}
+                </div>
+                <p class="font-weight-bold">{{u.name}} &nbsp;&nbsp;{{u.phone_no}}</p>
+                <p>{{u.address}}&nbsp;{{u.locality}}&nbsp;{{u.city_district_town}}&nbsp;{{u.landmark}}</p>
+                <p><span class="font-weight-bold">{{u.state}}</span>&nbsp;{{u.pincode}}</p>
+            </div>
+        </a>
+    </div>
+    {% include 'user/account-deatails/edit-address.html' %}
+    {% endfor %}

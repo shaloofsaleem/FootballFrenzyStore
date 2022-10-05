@@ -1,0 +1,44 @@
+{% extends 'admin/admin-base.html' %}
+{% load widget_tweaks %}
+
+    {% load static %}
+    {% block title %}
+    product product_attribute
+  {% endblock title %}
+    {% block content  %}
+    <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                {% include 'admin/admin-includes/alert.html' %}
+              <h4>product</h4>
+            </div>
+            <div class="card-body">
+                <form method='POST' action="" enctype="multipart/formdata">
+                    {% csrf_token %}
+            
+            <div class="form-group">
+                <label> product_attribute</label>
+                
+                {% render_field form.product_attribute name="category_name" id="category_name" placeholder="Slug" class="form-control"%}
+            </div>
+            <div class="form-group">
+                <label>title  </label>
+                
+                {% render_field form.title   name="category_name" id="subcategory_name" placeholder="subcategory_name" class="form-control" %}
+            </div>
+            <div class="form-group">
+                <label>images</label>
+                
+                {% render_field form.images name="slug" id="slug" placeholder="Slug" class="form-control" %}
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">SAVE Image</button>
+           </form>
+        </div>
+    </div>
+</div>
+
+    {% endblock %}
+    {% block custum_js %}
+    
+    {% endblock custum_js %}

@@ -1,0 +1,99 @@
+{% extends 'admin/admin-base.html' %}
+{% load widget_tweaks %}
+
+    {% load static %}
+    {% block title %}
+    Order-Status
+  {% endblock title %}
+    {% block content  %}
+    <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                {% include 'admin/admin-includes/alert.html' %}
+              <h4>Stuts</h4>
+            </div>
+            <div class="card-body">
+                <form method='POST' action="" enctype="">
+                    {% csrf_token %}
+            
+            <div class="form-group">
+                <label> OrderStuts</label>
+                
+                {% render_field form.order  %}
+            </div>
+            <div class="form-group">
+                <label>Order-Conformed</label>
+                
+                {% render_field form.order_confirmed name="category_name" id="subcategory_name" placeholder="subcategory_name" text="date"  %}
+            </div>
+            <div class="form-group">
+                <label>Order_Confirmed_Date</label>
+                
+                {% render_field form.order_confirmed_date name="slug"  type="datetime-local"  class="form-control datemask" %}
+                
+            <div class="form-group">
+                <label>Shipped</label>
+                
+                {% render_field form.Shipped  name="category_name"  placeholder="" %}
+            </div>
+            
+            <div class="form-group">
+                <label>Shipped_date</label>     
+                {% render_field form.Shipped_date  type="datetime-local" name="description " id="description " placeholder="category" class="" %}
+            </div>
+            
+            <div class="form-group">
+                <label>Out_for_delivery</label>     
+                {% render_field form.out_for_delivery   name="description " id="description " placeholder="category" class="" %}
+            </div>
+            <div class="form-group">
+                <label>Out_for_delivery_date</label>     
+                {% render_field form.out_for_delivery_date type="datetime-local"  name="description " id="description " placeholder="category" class="" %}
+            </div>
+            
+            <div class="form-group">
+                <label>Delivered</label>     
+                {% render_field form.delivered   class="" %}
+            </div>
+            <div class="form-group">
+                <label>delivered_date</label>     
+                {% render_field form.delivered_date type="datetime-local"  name="description " id="description " placeholder="category" class="" %}
+            </div>
+            <div class="form-group">
+                <label> delivery_execept_date</label>     
+                {% render_field form.delivery_execept_date type="datetime-local" name="description " id="description " placeholder="category" class="form-control datetimepicker" %}
+            </div>
+            
+            <div class="form-group">
+                <label>Cancelled</label>     
+                {% render_field form.Cancelled  name="description " id="description " placeholder="category" class="" %}
+            </div>
+            <div class="form-group">
+                <label> Cancel_reason_descrition</label>
+                {% comment %} <input type="{{f.f.widget.input_type}}"name="{{f.name}}" id="{{f.name}}" class="form-control"> {% endcomment %}
+                {% render_field form.cancel_reason_descrition  name="description " id="description " placeholder="category" class="summernote" %}
+            </div>
+            
+            <div class="form-group">
+                <label>cancelled_date</label>     
+                {% render_field form.cancelled_date   type="date" name="description" id="description " placeholder="category" class="" %}
+            </div>
+            <div class="form-group">
+                <label>Current_status</label>     
+                {% render_field form.current_status  name="descripti" id="description " placeholder="category" class="" %}
+            </div>
+            <div class="form-group">
+                <label>is_valid</label>
+                {% render_field form.is_active type="checkbox" %}  
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">SAVE Oder</button>
+           </form>
+        </div>
+    </div>
+</div>
+
+    {% endblock %}
+    {% block custum_js %}
+    
+    {% endblock custum_js %}

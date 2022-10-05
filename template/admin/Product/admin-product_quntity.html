@@ -1,0 +1,59 @@
+{% extends 'admin/admin-base.html' %}
+{% load widget_tweaks %}
+
+    {% load static %}
+    {% block title %}
+    Quntity
+  {% endblock title %}
+    {% block content  %}
+    <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                {% include 'admin/admin-includes/alert.html' %}
+              <h4>Quandity</h4>
+            </div>
+            <div class="card-body">
+                <form method='POST' action="" enctype="">
+                    {% csrf_token %}
+            
+            <div class="form-group">
+                <label> product</label>
+                
+                {% render_field form.product class="form-control"  %}
+            </div>
+            <div class="form-group">
+                <label>  product_size</label>
+                
+                {% render_field form.product_size class="form-control"  %}
+            </div>
+            <div class="form-group">
+                <label>product_color</label>
+                
+                {% render_field form.product_color class="form-control"  %}
+            </div>
+            <div class="form-group">
+                <label>quantity </label>
+                
+                {% render_field form.quantity name="category_name" id="subcategory_name" placeholder="subcategory_name" class="form-control" %}
+            </div>
+            <div class="form-group">
+                <label>Stock </label>
+                
+                {% render_field form.stock name="category_name" id="subcategory_name" placeholder="subcategory_name" class="form-control" %}
+            </div>
+
+            <div class="form-group">
+                <label>is_valid</label>
+                {% render_field form.is_active type="checkbox" %}  
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">SAVE Quantity</button>
+           </form>
+        </div>
+    </div>
+</div>
+
+    {% endblock %}
+    {% block custum_js %}
+    
+    {% endblock custum_js %}

@@ -1,0 +1,52 @@
+{% load static %}
+<div class="main-sidebar sidebar-style-2">
+    <aside id="sidebar-wrapper">
+      <div class="sidebar-brand">
+        <a href="index.html"><img src="{% static 'img/logo.png'%}" alt="logo" width="100" class="shadow-light rounded-circle"></a>
+      </div>
+      <div class="sidebar-brand sidebar-brand-sm">
+        <a href="index.html"><img src="{% static 'img/cosmic sports logo.png'%}" alt="logo" width="100" class="shadow-light rounded-circle"></a>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="menu-header">Dashboard</li>
+        <li class="dropdown active">
+          <a href="{% url 'adminn' %}" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+          <ul class="dropdown-menu">
+            <li class=active> <i class="fa-light fa-users"></i> <a class="nav-link" href="{% url 'user' %}">User</a></li>
+            <li><a class="nav-link" href="{% url 'product' %}">Product</a></li>
+            <li><a class="nav-link" href="{% url 'category' %}">Category</a></li>
+          </ul>
+        </li>
+        <li class="menu-header">Starter</li>
+        <li class="dropdown">
+          <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Categories</span></a>
+          <ul class="dropdown-menu">
+            
+            <li><a class="nav-link" href="{% url 'brand' %}">Brand</a></li>
+            <li><a class="nav-link" href="{% url 'size' %}">Size</a></li>
+            <li><a class="nav-link" href="{% url 'color' %}">Color</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Product</span></a>
+          <ul class="dropdown-menu">
+            <li><a class="nav-link" href="{% url 'subprodt' %}">Sub Product Attribut</a></li>
+            <li><a class="nav-link" href="{% url 'image' %} ">Images</a></li>
+            <li><a class="nav-link" href="{% url 'quanty' %}">Product quantity</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Order Managment</span></a>
+          <ul class="dropdown-menu">
+            <li><i class="fa-sharp fa-solid fa-cart-shopping"></i><a class="nav-link" href="{% url 'stuts_add' %}">OrderStuts</a></li>
+            <li><a class="nav-link" href="">Invoice</a></li>
+            <li><a class="nav-link" href="{% url 'Order' %}">Order List</a></li>
+          </ul>
+        </li>
+
+      <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
+        <a href="{% url 'logout' %}" class="btn btn-primary btn-lg btn-block btn-icon-split">
+          <i class="fas fa-rocket"></i>Logout
+        </a>
+      </div>        </aside>
+  </div>

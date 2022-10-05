@@ -1,0 +1,95 @@
+{% if user.is_authenticated %}
+<tbody>
+    {% for key,val in data.items %}
+    <!-- Start Cart Single Item-->
+    <tr id="cart-{{key}}">
+        <td class="product_remove"><a href="javascript:void(0)" onclick="delete_cart_items({{key}})"><i class="fa fa-trash-o"></i></a>
+            <a href="#">&nbsp;&nbsp;<i class="icon-heart mt-2"></i></a>
+        </td>
+        <td class="product_thumb"><a href="{% url 'product:all_product' %}"><img src="{{val.prod.product.images2.url}}"
+                    alt=""></a>
+        </td>
+        <td class="product_name"><a href="#">{{val.prod.product.product.product_name}}</a>
+        </td>
+        <td class="product-price">₹{{val.prod.unit_price}}</td>
+        <td class="product-price">₹{{val.prod.product_price}}</td>
+        <td class="product_size">
+            <div class=" product-variable-quantity text-center ml-5 d-flex">
+                <select id="size" onchange="size_select()" disabled>
+                    {% for k in val.product_size %}
+                    {% if val.prod.product_quantity.id == k.id %}
+                    <option value="{{k.id}}" selected>{{k.product_size}}</option>
+                    {% else %}
+                    <option value="{{k.id}}">{{k.product_size}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </td>
+        <td>
+            <div class="" id="qty_div-{{key}}">
+                <select id="qty" onchange="quatity({{key}})">
+                    {% for s in val.stock %}
+                    {% if val.prod.product_qty == s %}
+                    <option value="{{s}}" selected>{{s}}</option>
+                    {% else %}
+                    <option value="{{s}}">{{s}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+
+            </div>
+        </td>
+        <td class="product_total">₹ <span id="sub_totel_price-{{key}}">{{val.prod.totel_qty_price}}</span></td>
+    </tr> <!-- End Cart Single Item-->
+    {% endfor %}
+</tbody>
+
+{% else %}
+<tbody>
+    {% for key,value in data.items %}
+    <!-- Start Cart Single Item-->
+    <tr id="cart-{{key}}">
+        <td class="product_remove"><a href="javascript:void(0)" onclick="delete_cart_items({{key}})"><i class="fa fa-trash-o"></i></a>
+            <a href="#">&nbsp;&nbsp;<i class="icon-heart mt-2"></i></a>
+        </td>
+        <td class="product_thumb"><a href="product-details-default.html"><img src="{{value.image}}" alt=""></a>
+        </td>
+        <td class="product_name"><a href="#">{{value.cart_product}}</a>
+        </td>
+        <td class="product-price">₹{{value.unit_price}}</td>
+        <td class="product-price">₹{{value.price}}</td>
+        <td class="product_size">
+            <div class=" product-variable-quantity text-center ml-5 d-flex">
+                <select id="size" onchange="size_select({{key}})" disabled>
+                    {% for keys,value in value.prod_size.items %}
+                    {% for i,val in value.items %}
+                    {% if key == keys %}
+                    <option value="{{keys}}" selected>{{val}}</option>
+                    {% else %}
+                    <option value="{{keys}}">{{val}}</option>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
+                </select>
+            </div>
+        </td>
+        <td>
+            <div class="" id="qty_div-{{key}}">
+                <select id="qty" onchange="quatity({{key}})" >
+                    {% for i in value.stock %}
+                    {% if i == value.product_qty %}
+                    <option value="{{i}}" selected>{{i}}</option>
+                    {% else %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </td>
+        <td class="product_total">₹ <span id="sub_totel_price-{{key}}">{{value.sub_totel_price}}</span></td>
+    </tr> <!-- End Cart Single Item-->
+    <!-- {% widthratio value.price 1 value.product_qty %} -->
+    {% endfor %}
+</tbody>
+{% endif %}

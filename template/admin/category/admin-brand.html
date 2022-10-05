@@ -1,0 +1,58 @@
+{% extends 'admin/admin-base.html' %}
+{% load widget_tweaks %}
+
+    {% load static %}
+    {% block title %}
+    Brand
+  {% endblock title %}
+    {% block content  %}
+    <div class="row">
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                {% include 'admin/admin-includes/alert.html' %}
+              <h4>Color</h4>
+            </div>
+            <div class="card-body">
+                <form method='POST' action="" enctype="">
+                    {% csrf_token %}
+            
+            <div class="form-group">
+                <label> subcategory</label>
+                
+                {% render_field form.brand_category  %}
+            </div>
+            <div class="form-group">
+                <label>Brand</label>
+                
+                {% render_field form.title name="category_name" id="subcategory_name" placeholder="subcategory_name" class="form-control" %}
+            </div>
+            <!-- <div class="form-group">
+                <label>slug</label>
+                
+                {% render_field form.slug name="slug" id="slug" placeholder="Slug" class="form-control" %}
+            </div> -->
+            <div class="form-group">
+                <label>Brand Image</label>
+                
+                {% render_field form.brand_images  name="category_name"  placeholder="subcategory_name" %}
+            </div>
+            
+            <div class="form-group">
+                <label>Discription</label>     
+                {% render_field form.discription  name="description " id="description " placeholder="category" class="summernote" %}
+            </div>
+            <div class="form-group">
+                <label>is_valid</label>
+                {% render_field form.is_active type="checkbox" %}  
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">SAVE Brand</button>
+           </form>
+        </div>
+    </div>
+</div>
+
+    {% endblock %}
+    {% block custum_js %}
+    
+    {% endblock custum_js %}

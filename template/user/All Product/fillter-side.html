@@ -1,0 +1,98 @@
+<div class="col-lg-3">
+    <!-- Start Sidebar Area -->
+    <div class="siderbar-section" data-aos="fade-up" data-aos-delay="0">
+
+        <!-- Start Single Sidebar Widget -->
+        <div class="sidebar-single-widget">
+            <h6 class="sidebar-title">CATEGORIES</h6>
+            <div class="sidebar-content">
+                
+               
+                {% load mptt_tags %}
+                
+                <ul class="sidebar-menu">
+                    <li>
+                        <ul class="sidebar-menu-collapse">
+                            {% recursetree category %}
+                            <!-- Start Single Menu Collapse List -->
+                            <li class="sidebar-menu-collapse-list">
+                                <div class="accordion">
+                                   
+
+                                    <a href="/category/{{node.id}}/{{node.slug}}" class="accordion-title collapsed  "
+                                        data-bs-toggle="collapse"  {% if not node.is_leaf_node %} data-bs-target="#men-fashion"
+                                        aria-expanded="false"{% endif %}  > {{ node.category }} <i
+                                            class="ion-ios-arrow-right"></i></a>
+                                    <div id="men-fashion" class="collapse filter-checkbox "id="category-{{i.id}}" data-filter="category" value="{{i.id}}" >
+                                        {% if not node.is_leaf_node %}
+                                        <ul class="accordion-category-list">
+
+                                            <li><a href="#">{{ children }}</a></li>
+                                           
+                                        </ul>
+                                        {% endif %} 
+                                    </div>
+                                </div>
+                            </li> <!-- End Single Menu Collapse List -->
+                            {% endrecursetree %}
+                        </ul>
+                    </li>
+                    <li><a href="#">Football</a></li>
+                   
+                </ul>
+            </div>
+        </div> <!-- End Single Sidebar Widget -->
+
+        <!-- Start Single Sidebar Widget -->
+        <div class="sidebar-single-widget">
+            <h6 class="sidebar-title">FILTER BY PRICE</h6>
+            <div class="sidebar-content">
+                <div id="slider-range"></div>
+                <div class="filter-type-price">
+                    <label for="amount">Price range:</label>
+                    <input type="text" id="amount">
+                </div>
+            </div>
+        </div> <!-- End Single Sidebar Widget -->
+
+        <!-- Start Single Sidebar Widget -->
+        <div class="sidebar-single-widget">
+            <h6 class="sidebar-title">MANUFACTURER</h6>
+            <div class="sidebar-content">
+                <div class="filter-type-select">
+                    <ul>
+                        {% for b in brand %}
+                        <li>
+                            <label class="checkbox-default" for="brakeParts">
+                                <input type="checkbox" id="brakeParts">
+                                <span>{{b.title}}</span>
+                            </label>
+                        </li>
+                        {% endfor %}
+                        
+                    </ul>
+                </div>
+            </div>
+        </div> <!-- End Single Sidebar Widget -->
+
+        <!-- Start Single Sidebar Widget -->
+        <div class="sidebar-single-widget">
+            <h6 class="sidebar-title">SELECT BY COLOR</h6>
+            <div class="sidebar-content">
+                <div class="filter-type-select">
+                    <ul>
+                        {% for c in color %}
+                        <li>
+                            <label class="checkbox-default" for="black">
+                                <input type="checkbox" id="black">
+                                <span>{{c.title}}</span>
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div> <!-- End Single Sidebar Widget -->
+
+    </div> <!-- End Sidebar Area -->
+</div>

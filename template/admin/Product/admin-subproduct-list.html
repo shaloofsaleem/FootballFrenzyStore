@@ -1,0 +1,75 @@
+{% extends 'admin/admin-base.html' %}
+    {% load static %}
+    {% block title %}
+    Subproduct LIST
+  {% endblock title %}
+    {% block content  %}
+    <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4>Basic DataTables</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="table-1">
+                  <thead>                                 
+                    <tr>
+                      <th class="text-center">
+                        #
+                      </th>
+                      <th>Product</th>
+                      <th>Sub_Product_Totel_Stoke</th>
+                      <th>Images</th>
+                      <th>Offerprice</th>
+                      <th>Offer_Persentage</th>
+                      <th> Offer_Expiry_Date</th>
+                      <th>Section</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                      <th><a href="{% url 'subproduct_add' %}" class="btn btn-primary">Add Product Atribut</a></th>
+                    </tr>
+                  </thead>
+                  <tbody>                                 
+                   {% for s in sub  %}
+                    <tr>
+                      <td>
+                        {{s.forloop}}
+                      </td>
+                      <td>{{s.product}}</td>
+                      <td>{{s.sub_product_totel_stoke}}</td>
+                      <td>
+                        <img alt="image" src="{{s.images.url}}" class="rounded-circle" width="35" data-toggle="tooltip" title="Rizal Fakhri">
+                        <img alt="image" src="{{s.images2.url}}" class="rounded-circle" width="35" data-toggle="tooltip" title="Hasan Basri">
+                      </td>
+                      <td>{{s.offerprice }}</td>
+                      <td>{{s.offer_persentage}}</td>
+                      <td>{{s.offer_expiry_date}}</td>
+                      <td>{{s.section}}</td>
+                      <td>
+                        {% if s.is_active %}
+                            <div class="badge badge-success">{{s.is_active }}</div>
+                            {% else %}
+                            <div class="badge badge-warning">{{s.is_active }}</div>
+                            {% endif %}
+                        </td>
+                      <td>
+                        <a class="btn btn-primary btn-action" href="{% url 'subupdate' s.id %}" data-toggle="tooltip" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                      </td>
+                        <td>
+                          <form action="" method="POST">
+                        <a class="btn btn-danger btn-action" href="" data-toggle="tooltip" title="Delete" ><i class="fas fa-trash"></i></a>
+                          </f>
+                       </td>
+                     
+        
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock %}

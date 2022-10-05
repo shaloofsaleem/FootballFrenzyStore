@@ -1,0 +1,37 @@
+
+
+{% for p in data %}
+<div class="col-12">
+    <!-- Start Product Defautlt Single -->
+    <div class="product-list-single product-color--golden">
+        <a  href="{{p.get_absolute_url}}" class="product-list-img-link" target="_blank">
+            
+            <img class="img-fluid" src="{{p.images.url}}" alt="">
+            <img class="img-fluid" src="{{p.images2.url}}" alt="">
+        </a>
+        <div class="product-list-content">
+            <h5 class="product-list-link"><a href="product-details-default.html">{{p.product.product_name}}</a></h5>
+            <ul class="review-star">
+                <li class="fill"><i class="ion-android-star"></i></li>
+                <li class="fill"><i class="ion-android-star"></i></li>
+                <li class="fill"><i class="ion-android-star"></i></li>
+                <li class="fill"><i class="ion-android-star"></i></li>
+                <li class="empty"><i class="ion-android-star"></i></li>
+            </ul>
+            <span class="product-list-price"><del>₹{{p.product.unit_price}}</del>
+                ₹{{p.offerprice}}</span>
+            <div><p>{{p.product.description |truncatewords:20 }}</p></div>
+            <div class="product-action-icon-link-list">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#modalAddcart"
+                    class="btn btn-lg btn-black-default-hover">Add to cart</a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#modalQuickview"
+                    class="btn btn-lg btn-black-default-hover"><i class="icon-magnifier"></i></a>
+                <a href="wishlist.html" class="btn btn-lg btn-black-default-hover"><i
+                        class="icon-heart"></i></a>
+                <a href="compare.html" class="btn btn-lg btn-black-default-hover"><i
+                        class="icon-shuffle"></i></a>
+            </div>
+        </div>
+    </div> <!-- End Product Defautlt Single -->
+</div>
+{% endfor %}

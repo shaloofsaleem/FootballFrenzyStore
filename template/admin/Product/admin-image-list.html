@@ -1,0 +1,69 @@
+{% extends 'admin/admin-base.html' %}
+    {% load static %}
+    {% block title %}
+    Image LIST
+  {% endblock title %}
+    {% block content  %}
+    
+    <div class="row">
+      
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Advanced Table</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-striped" id="table-2">
+                <thead>
+                  <tr>
+                    <th class="text-center">
+                      <div class="custom-checkbox custom-control">
+                        <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
+                        <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                      </div>
+                    </th>
+                    <th>Product_Attribute</th>
+                    <th>Title</th>
+                    <th>Images</th>
+                    <th>Action</th>
+                    <th><a href="{% url 'image_add' %}" class="btn btn-primary">Add Image</a></th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in image %}
+                  <tr>
+                    <td>
+                      <div class="custom-checkbox custom-control">
+                        <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
+                        <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+                      </div>
+                    </td>
+                    <td>{{i.product_attribute}}</td>
+                    <td class="align-middle">
+                      {{i.title}}
+                    </td>
+                    <td>
+                      <img alt="image" src="{{i.images.url}}" class="rounded-circle" width="35" data-toggle="tooltip" title="Wildan Ahdian">
+                    </td>
+                    <td>
+                      <a class="btn btn-primary btn-action" href="{% url 'imageupdate' i.id %}" data-toggle="tooltip" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                    </td>
+                      <td>
+                        <form action="" method="POST">
+                      <a class="btn btn-danger btn-action" href="{% url 'imagedelete' i.id %}" data-toggle="tooltip" title="Delete" ><i class="fas fa-trash"></i></a>
+                        </f>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock %}

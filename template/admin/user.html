@@ -1,0 +1,89 @@
+{% extends 'admin/admin-base.html' %}
+    {% load static %}
+    {% block title %}
+    User
+  {% endblock title %}
+    {% block content  %}
+    
+       
+    <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4>Advanced Table</h4>
+              <div class="card-header-form">
+                <form>
+                  <div class="input-group">
+                    <input type="text" name="key" class="form-control" placeholder="Search">
+                    <div class="input-group-btn">
+                      <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <tr>
+                    <th>
+                      <div class="custom-checkbox custom-control">
+                        <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
+                        <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                      </div>
+                    </th>
+                    <th> First_Name</th>
+                    <th>Last_Name</th>
+                    <th>image</td>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                  {% for user in user %}
+                  <tr>
+                    <td class="p-0 text-center">
+                      <div class="custom-checkbox custom-control">
+                        <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
+                        <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+                      </div>
+                    </td>
+                    <td>{{user.first_name}}</td>
+                    <td>
+                      {{user.last_name}}
+                    </td>
+                    <td>
+                      <img alt="image" src="{% static 'img/avatar/avatar-5.png' %}" class="rounded-circle" width="35" data-toggle="tooltip" title="{{user.first_name}}">
+                    </td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.phone_no}}</td>
+                    <td>
+                        {% if user.is_active %}
+                        <div class="badge badge-success">Active</div>
+                        {% else %}
+                        <div class="badge badge-warning">Inactive</div>
+                        {% endif %}
+
+                        </td>
+                    <td>
+                        {% if user.is_active %}
+              <a type="button" class="btn btn-danger w-100" href="{% url 'block-user' pk=user.id %}"
+                onclick="blockconfirm(event,'{{user.first_name}}'+' {{user.last_name}}')">
+                Block
+              </a>
+              {% else %}
+              <a type="button" class="btn btn-success w-100" href="{% url 'unblock-user' pk=user.id %}"
+                onclick="unblockconfirm(event,'{{user.first_name}}'+' {{user.last_name}}')">
+                Unblock
+              </a>
+              {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endblock %}

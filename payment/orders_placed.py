@@ -1,3 +1,4 @@
+import base64
 from django.shortcuts import render,get_object_or_404,redirect
 
 from .models import CashOnDeliveryTextGenarator
@@ -17,6 +18,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 
+from django.core import signing
 
 CACHE_TTL = getattr(settings ,'CACHE_TTL' , DEFAULT_TIMEOUT)
 
@@ -30,94 +32,100 @@ def cash_on_delivery_code_genarator(request,*args,**kwargs):
     text_instence=get_object_or_404(CashOnDeliveryTextGenarator,pk=random_text)
     return JsonResponse({'data':True,'text_instence':text_instence.text})
 
-from django.core import signing
-
 def cash_on_delivery_order_confrim(request,*args,**kwargs):
+    product_order_session_id=kwargs.get('product_order_session_id')
+    denc = base64.b64decode(product_order_session_id)
+    order_id = denc.decode('ascii')
     try:
-        if 'order_id' in request.session:     
-            order_instence=get_object_or_404(Order,pk=request.session['order_id'])
-            if order_instence:
-                order_instence.order_date=timezone.now()
-                order_instence.order_status='ordered'
-                orders_id='OD'+str(order_instence.id)
-                order_instence.orders_id=str(orders_id)
-                order_instence.is_active=True
-                order_instence.save() 
-                
-                for i in order_instence.products.all():
-                    cart_intences = get_object_or_404(Cart,pk=i.id,user=request.user)
-                    cart_intences.is_active=False
-                    cart_intences.save()
-                    
-                del request.session['length_product']    
-                
-                payment_instence=Payment()
-                payment_instence.order=order_instence
-                payment_instence.user=request.user
-                payment_instence.payment_method='Cash On Delivery'
-                payment_instence.payment_price=order_instence.totel_payment_price
-                payment_instence.payment_status='Pending'
-                payment_instence.is_active=True
-                payment_instence.save()
+        order_instence=get_object_or_404(Order,pk=int(order_id))
+        if order_instence:
+            orders_id='OD'+str(order_instence.id)
+            order_instence.orders_id=str(orders_id)
+            order_instence.order_date=timezone.now()
+            order_instence.order_status='ordered'
+            order_instence.is_active=True
+            order_instence.save() 
             
-                order_status_instence=OrderStatus()
-                order_status_instence.order=order_instence
-                order_status_instence.order_confirmed=True
-                order_status_instence.order_confirmed_date=timezone.now()
-                order_status_instence.is_active=True
-                if order_instence.delivery_address.state == 'Kerala':
-                    order_status_instence.delivery_execept_date=timezone.now()+timedelta(days=10)
-                else:
-                    order_status_instence.delivery_execept_date=timezone.now()+timedelta(days=20)
-                order_status_instence.save()
-                del request.session['order_id']
+            for i in order_instence.products.all():
+                cart_intences = get_object_or_404(Cart,pk=i.id,user=request.user)
+                cart_intences.is_active=False
+                cart_intences.save()
                 
-                email=order_instence.order_confirmation_email
-                mail_subject = "Order Infermation"
-                current_site = get_current_site(request)
-                massage = render_to_string('user/payment-order/order-infermation-email.html',
-                {
-                    'order_instence': order_instence,
-                    'domain'  : current_site,
-                    'totel': payment_instence.payment_price
-                })
-                send_email = EmailMessage(mail_subject,massage,to=[email])
-                send_email.send()
-                
-                order_id=signing.dumps(str(order_instence.id))
-                payment_id=signing.dumps(str(payment_instence.id))
-                order_status_id=signing.dumps(str(order_status_instence.id))
-                return redirect('payment:order_placed',order_id=order_id,payment_id=payment_id,order_status_id=order_status_id)
+              
+            
+            payment_instence=Payment()
+            payment_instence.order=order_instence
+            payment_instence.user=request.user
+            payment_instence.payment_method='Cash On Delivery'
+            payment_instence.payment_price=order_instence.totel_payment_price
+            payment_instence.payment_status='PENDING'
+            payment_instence.is_active=True
+            payment_instence.save()
+
+            order_status_instence=OrderStatus()
+            order_status_instence.order=order_instence
+            order_status_instence.order_confirmed=True
+            order_status_instence.order_confirmed_date=timezone.now()
+            order_status_instence.is_active=True
+            if order_instence.delivery_address.state == 'Kerala':
+                order_status_instence.delivery_execept_date=timezone.now()+timedelta(days=10)
+            else:
+                order_status_instence.delivery_execept_date=timezone.now()+timedelta(days=20)
+            order_status_instence.save()
+
+                          
+            email=order_instence.order_confirmation_email
+            mail_subject = "Order Infermation"
+            current_site = get_current_site(request)
+            massage = render_to_string('user/payment-order/order-infermation-email.html',
+            {
+                'order_instence': order_instence,
+                'domain'  : current_site,
+                'totel': payment_instence.payment_price
+            })
+            send_email = EmailMessage(mail_subject,massage,to=[email])
+            send_email.send()
+            
+            order_id=signing.dumps(str(order_instence.id))
+            payment_id=signing.dumps(str(payment_instence.id))
+            order_status_id=signing.dumps(str(order_status_instence.id))
+            return redirect('payment:order_placed',order_id=order_id,payment_id=payment_id,order_status_id=order_status_id)
     except:
-        return redirect('accounts:login')
+        return render(request,'user/status/failed.html')
 
 
 def order_placed(request,*args,**kwargs):
-    order_id_prm = kwargs.get('order_id')
-    payment_id_prm = kwargs.get('payment_id')
-    order_status_id_prm = kwargs.get('order_status_id')
-    order_id=signing.loads(order_id_prm)
-    payment_id=signing.loads(payment_id_prm)
-    order_status_id=signing.loads(order_status_id_prm)
-    
-    order_instence=get_object_or_404(Order,pk=order_id)
-    payment_instence=get_object_or_404(Payment,pk=payment_id)
-    order_status_instence=get_object_or_404(OrderStatus,pk=order_status_id)
+    try:
+        order_id_prm = kwargs.get('order_id')
+        payment_id_prm = kwargs.get('payment_id')
+        order_status_id_prm = kwargs.get('order_status_id')
+        order_id=signing.loads(order_id_prm)
+        payment_id=signing.loads(payment_id_prm)
+        order_status_id=signing.loads(order_status_id_prm)
         
-    context={
-        'order':order_instence,
-        'payment':payment_instence,
-        'orderstatus':order_status_instence,
-        'cancel_reasons': CancelReasons.objects.all(),
-        'order_id':signing.dumps(str(order_status_instence.id)),
-        'payment_id':signing.dumps(str(payment_instence.id)),
-        'refund': RefundPayment.objects.filter(order_status=order_status_instence,order=order_instence,user=request.user,refund_status=True)
+        try:
+            del request.session['order_id']
+            del request.session['length_product']  
+        except:    
+            pass
         
-    }
-    print(order_id)
-    print(payment_id)
-    return render(request,'user/payment-order/order-placed.html',context)
+        order_instence=get_object_or_404(Order,pk=order_id)
+        payment_instence=get_object_or_404(Payment,pk=payment_id)
+        order_status_instence=get_object_or_404(OrderStatus,pk=order_status_id)
 
+        context={
+            'order':order_instence,
+            'payment':payment_instence,
+            'orderstatus':order_status_instence,
+            'cancel_reasons': CancelReasons.objects.all(),
+            'order_id':signing.dumps(str(order_status_instence.id)),
+            'payment_id':signing.dumps(str(payment_instence.id)),
+            'refund': RefundPayment.objects.filter(order_status=order_status_instence,order=order_instence,user=request.user,refund_status=True)
+            
+        }
+        return render(request,'user/payment-order/order-placed.html',context)
+    except:
+        return render(request,'user/status/404.html')
 
 def cancel_order(request,*args,**kwargs):
     refund_exp_time=''
@@ -141,6 +149,7 @@ def cancel_order(request,*args,**kwargs):
             refund_payment=RefundPayment()
             refund_payment.user=request.user
             refund_payment.order=order_instence.order
+            refund_payment.payment=payment_instence
             refund_payment.order_status=order_instence
             refund_payment.refund_status=True
             refund_payment.execept_refund_date=timezone.now()+timedelta(days=8)
@@ -158,19 +167,20 @@ def cancel_order(request,*args,**kwargs):
 
 
 def order_deatails(request,*args,**kwargs):
-    if cache.get('order_deatails'):
-        context=cache.get('order_deatails')
-        print("DATA COMING FROM CASHE")
-    else: 
-        print("DATA COMING FROM DB")
-        order_inseteses=OrderStatus.objects.select_related('order').filter(order__user=request.user,order__is_active=True,is_active=True)
-
-        context={
-            'order':order_inseteses
-        }
-        cache.set('order_deatails',context)
-    return render(request,'user/payment-order/order-deatails/orders.html',context)
-
+    try:
+        if cache.get('order_deatails'):
+            context=cache.get('order_deatails')
+            print("DATA COMING FROM CASHE")
+        else: 
+            print("DATA COMING FROM DB")
+            order_inseteses=OrderStatus.objects.select_related('order').filter(order__user=request.user,order__is_active=True,is_active=True)
+            context={
+                'order':order_inseteses
+            }
+            cache.set('order_deatails',context)
+        return render(request,'user/payment-order/order-deatails/orders.html',context)
+    except:
+        return render(request,'user/status/404.html')
 
 def search_order(request,*args,**kwargs):
     search_order = request.POST.get('search_order')
@@ -216,17 +226,20 @@ def filter_orders(request,*args,**kwargs):
     
     
 def order_placed_history(request,*args,**kwargs):
-    orderpk=kwargs.get('orderpk')
-    itemid=kwargs.get('itemid')
-    statusid=kwargs.get('sid')
-    
-    order_instence=get_object_or_404(Order,pk=orderpk)
-    order_status_instence=get_object_or_404(OrderStatus,pk=statusid)  
-    cart_instence=get_object_or_404(Cart,pk=itemid)
-    context={
-        'order':order_instence,
-        'orderstatus':order_status_instence,     
-        'cart':cart_instence,
-        'cancel_reasons': CancelReasons.objects.all(),
-    }
-    return render(request,'user/payment-order/order-placed-history/order-placed-history.html',context)
+    try:
+        orderpk=kwargs.get('orderpk')
+        itemid=kwargs.get('itemid')
+        statusid=kwargs.get('sid')
+        
+        order_instence=get_object_or_404(Order,pk=orderpk)
+        order_status_instence=get_object_or_404(OrderStatus,pk=statusid)  
+        cart_instence=get_object_or_404(Cart,pk=itemid)
+        context={
+            'order':order_instence,
+            'orderstatus':order_status_instence,     
+            'cart':cart_instence,
+            'cancel_reasons': CancelReasons.objects.all(),
+        }
+        return render(request,'user/payment-order/order-placed-history/order-placed-history.html',context)
+    except:
+        return render(request,'user/status/404.html')

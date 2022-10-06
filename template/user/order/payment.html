@@ -1,15 +1,19 @@
-<div class="login border shadow-sm mb-2">
-    <div class="row p-2">
+<div class="login  mb-2">
+    <div class="row border shadow-sm bg-light p-2">
         <div class="col-lg-12 col-12 mb-3">
             <div class="d-flex col-lg-12 col-12">
                 <h5 class="font-weight-bold ml-3 ">4</h5>
                 <h5 class="font-weight-bold ml-3 d-flex">PAYMENT OPTIONS</h5>
             </div>
             <div id="payment_methods" {% if order == None %} style="display: none;" {% endif %}>
+                <input type="text" {% if product_order_id %} value="{{product_order_id}}" {% endif %} name=""
+                    id="product_order_session_id" hidden readonly>
+                <input type="text" {% if order_id %} value="{{order_id}}" {% endif %} name="" id="razerpay_order_id"
+                    hidden readonly>
                 <div>
-                {% include 'user/order/cash-on-delivery.html' %}
-                {% include 'user/order/razorpay.html' %}
-                {% include 'user/order/paypal.html' %}
+                    {% include 'user/order/cash-on-delivery.html' %}
+                    {% include 'user/order/razorpay.html' %}
+                    {% include 'user/order/paypal.html' %}
 
                 </div>
                 {% include 'user/order/coupon.html' %}
@@ -17,4 +21,3 @@
         </div>
     </div>
 </div>
-

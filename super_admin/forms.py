@@ -3,7 +3,7 @@ from .models import *
 from django import forms
 from category.models import*
 from product.models import *
-
+from payment.models import *
 
 
 
@@ -65,4 +65,8 @@ class OrderStatusModel(forms.ModelForm):
 class OrdereModel(forms.ModelForm):
     class Meta:
         model=Order
-        fields= "__all__"           
+        fields= "__all__"        
+class PaymentModel(forms.ModelForm):
+    class Meta:
+        model=Payment
+        fields= "__all__"         

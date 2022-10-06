@@ -212,11 +212,13 @@
             <h6 class="font-weight-bold">Phone number {{order.delivery_address.phone_no}} </h6>
         </div>
         <div class="col-lg-5 mt-5">
-            <h6 class="font-weight-bold">More actions</h6>
+            {% if orderstatus.Cancelled == False %}
+           <h6 class="font-weight-bold">More actions</h6>
             <div class="d-flex mt-2">
-                <p>Prefer contactless delivery ?</p>
-                <a href="" class="btn border shadow-sm ml-3">Pay Now</a>
+                <p>Download Invoice</p>
+                <a href="{% url 'payment:invoice' order.id orderstatus.id %}" class="btn border shadow-sm ml-3">Download</a>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

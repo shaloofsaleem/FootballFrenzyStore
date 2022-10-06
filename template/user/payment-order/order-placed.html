@@ -244,6 +244,7 @@
                 - {{order.delivery_address.pincode}}, {{order.delivery_address.state}}</p>
             <h6 class="font-weight-bold">Phone number {{order.delivery_address.phone_no}} </h6>
         </div>
+        {% if payment.payment_status == 'PENDING' and orderstatus.Cancelled == False %}
         <div class="col-lg-5 mt-5">
             <h6 class="font-weight-bold">More actions</h6>
             <div class="d-flex mt-2">
@@ -251,6 +252,7 @@
                 <a href="" class="btn border shadow-sm ml-3">Pay Now</a>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 

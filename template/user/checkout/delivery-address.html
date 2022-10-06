@@ -1,5 +1,5 @@
-<div class="login border shadow-sm mb-2 ">
-    <div class="row p-2 ">
+<div class="login  mb-2 ">
+    <div class="row p-2 border shadow-sm bg-light" >
         <div class="col-lg-12 col-12 mb-3">
             <div class="row ">
                 <div class="d-flex col-lg-9 col-9">
@@ -32,7 +32,8 @@
             <div id="checkout_address" style="display: none;">
                 <hr>
                 {% for u in user_address %}
-                <label class="radio mb-1 list_checkout_address" id="list_checkout_address-{{u.id}}">
+                <div class="row " >
+                <label class="radio mb-1 list_checkout_address " id="list_checkout_address-{{u.id}}" >
                     <input type="radio" name="check_checkout_address" class="check_checkout_address" value="{{u.id}}"
                         onclick="check_checkout_address({{u.id}})" required
                         
@@ -42,7 +43,7 @@
                         {% endif %}
                         {% endif %}>
                     <span>
-                        <div class="col-lg-12 col-12" style="width: 42rem;">
+                        <div class="col-lg-12 col-12 delivery-address-mediaquary" >
                             <a href="javascript:void(0)" class="m-2 float-right" onclick="edit_checkout({{u.id}})">
                                 <p>Edit</p>
                             </a>
@@ -62,11 +63,12 @@
                         </div>
                     </span>
                 </label>
+            </div>
                 {% include 'user/checkout/edit-delivery-address.html' %}
                 {% endfor %}
 
                 <a href="javascript:void(0)" onclick="add_new_checkout_address()">
-                    <div class="border p-3 mt-3" id="add_new_checkout_address_btn_link">
+                    <div class="border border-secondary p-3 mt-3" id="add_new_checkout_address_btn_link">
                         <h6 class="font-weight-bold">+ ADD A NEW ADDRESS</h6>
                     </div>
                 </a>

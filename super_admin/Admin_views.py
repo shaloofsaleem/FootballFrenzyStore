@@ -1,16 +1,22 @@
+from multiprocessing import context
 from django.shortcuts import render,redirect
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from accounts.views import *
 
 from category.models import *
+from cart.models import *
 
 
 #Create your views here.
 @login_required(login_url='home')    
 @never_cache
 def Adminhome(request):
-    return render(request,'admin/admin-home.html')
+    order= Order.objects.filter(is_active=True).count()
+    context={
+        'ordercount':order
+    }
+    return render(request,'admin/admin-home.html', context)
 @never_cache
 def Users(request):
     if request.user.is_admin:

@@ -1,0 +1,76 @@
+{% extends 'admin/admin-base.html' %}
+    {% load static %}
+    {% block title %}
+    Order LIST
+  {% endblock title %}
+    {% block content  %}
+
+    <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Full Width</h4>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-md">
+                <tr>
+                  <th>#</th>
+                  <th>Email</th>
+                  <th>Delivery_Address</th>
+                  <th>Orders_Id</th>           
+                  <th> Totel-Price</th>
+                  <th> Totel_Offer_Price </th>
+                  <th>Coupon_Price</th>
+                  <th>Coupon_Savings_Price</th>
+                  <th> Totel_Payment_Price</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+                {% for o in  order %}
+                <tr>
+                  <td>{{o.forloop}}</td>
+                  <td>{{o.user}}</td>
+                  <td>{{o.delivery_address}}</td>
+                  <td>{{o.orders_id}}</td>
+                  <td>{{o.totel_unit_price}}</td>
+                  <td>{{o.totel_offer_price}}</td>
+                  <td>{{o.coupon_price}}</td>
+                  <td>{{o.coupon_savings_price}}</td>
+                  <td>{{o.totel_payment_price}}</td>
+                  <td><div class="badge badge-success">Active</div></td>
+                  <td>
+                    <button class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#exampleModal">Buttons</button>
+                  </td>
+
+
+                  
+          
+                  
+                </tr>
+                {% endfor %}
+                <!-- Modal -->
+    </table>
+            </div>
+          </div>
+          <div class="card-footer text-right">
+            <nav class="d-inline-block">
+              <ul class="pagination mb-0">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+
+
+    {% endblock %}

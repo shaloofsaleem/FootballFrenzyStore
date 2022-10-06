@@ -1,6 +1,16 @@
 {% extends "user/base-layout.html" %}
 {% load static %}
 
+{% block static %}
+<style>
+    @media screen and (min-width:1200px) {
+        .delivery-address-mediaquary {
+            width: 690px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- ...:::: Start Breadcrumb Section:::... -->
 <div class="breadcrumb-section breadcrumb-bg-color--golden">
@@ -33,16 +43,14 @@
                     {% include 'user/checkout/delivery-address.html' %}
                     {% include 'user/checkout/order-summery.html' %}
                     {% include 'user/order/payment.html' %}
-                    
-
                 </div>
             </div>
 
             <div class="col-sm-12 col-md-3 col-lg-4">
                 <!-- Tab panes -->
-                <div class="tab-content dashboard_content border p-2" id="totels_section" data-aos="fade-up"
-                    data-aos-delay="200">
-                    <div id="all-checkout-totel-and-order-totel">
+                <div class="tab-content dashboard_content border shadow-sm bg-light p-2" id="totels_section"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <div id="all-checkout-totel-and-order-totel ">
                         {% if order.coupen_active == True %}
                         {% include 'user/order/order-totel.html' %}
                         {% else %}
@@ -57,30 +65,33 @@
 {% endblock %}
 
 {% block script %}
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script>
+
     function login_Change() {
         document.getElementById('login_check').style.display = 'none';
         document.getElementById('login_Change').style.display = 'none';
-        var login = document.getElementsByClassName('checkout_login');
-        for (var i = 0; i < login.length; i++) {
+        let login = document.getElementsByClassName('checkout_login');
+        for (let i = 0; i < login.length; i++) {
             login[i].style.display = 'block';
         }
     }
+
     function Continue_Checkout() {
         document.getElementById('login_check').style.display = 'block';
         document.getElementById('login_Change').style.display = 'block';
-        var login = document.getElementsByClassName('checkout_login');
-        for (var i = 0; i < login.length; i++) {
+        let login = document.getElementsByClassName('checkout_login');
+        for (let i = 0; i < login.length; i++) {
             login[i].style.display = 'none';
         }
         document.getElementById('checkout_address').style.display = 'block';
     }
 
     function check_checkout_address(id) {
-        // var check_checkout_address = $(".check_checkout_address:checked").val();
-        var delivery_address_btn = document.getElementsByClassName('delivery_address_btn');
-        for (var i = 0; i < delivery_address_btn.length; i++) {
+        // let check_checkout_address = $(".check_checkout_address:checked").val();
+        let delivery_address_btn = document.getElementsByClassName('delivery_address_btn');
+        for (let i = 0; i < delivery_address_btn.length; i++) {
             delivery_address_btn[i].style.display = 'none';
         }
         document.getElementById('delivery_address_btn-' + id).style.display = 'block'
@@ -93,7 +104,29 @@
         document.getElementById('checkout_address').style.display = 'block';
     }
 
+
+    // async function delivery_address(id) {
+    //     let data = new FormData()
+    //     data.append("csrfmiddlewaretoken", '{{csrf_token}}')
+    //     data.append("id", id)
+
+    //     console.log("dta", data)
+
+    //     // let csrfmiddlewaretoken = '{{csrf_token}}';
+    //     // let data ={"id":id, csrfmiddlewaretoken:csrfmiddlewaretoken}
+    //     await axios.post("delivery-address", data).then(res => {
+    //         console.log(res.data)
+    //         // $("#checkout_delivery_address").(res.checkout_address);
+            
+    //         document.getElementById('checkout_items_list_order_summry').style.display = 'block';
+    //         document.getElementById('check_checkout_address_check').style.display = 'block';
+    //         document.getElementById('check_checkout_address_check_Change').style.display = 'block';
+    //         document.getElementById('checkout_address').style.display = 'none';
+    //     })
+    // }
+
     function delivery_address(id) {
+
         $.ajax({
             type: "POST",
             url: "{% url 'cart:delivery_address' %}",
@@ -106,10 +139,10 @@
             },
             success: function (res) {
                 $("#checkout_delivery_address").html(res.data);
-                document.getElementById('checkout_items_list_order_summry').style.display = 'block';
-                document.getElementById('check_checkout_address_check').style.display = 'block';
-                document.getElementById('check_checkout_address_check_Change').style.display = 'block';
-                document.getElementById('checkout_address').style.display = 'none';
+    document.getElementById('checkout_items_list_order_summry').style.display = 'block';
+    document.getElementById('check_checkout_address_check').style.display = 'block';
+    document.getElementById('check_checkout_address_check_Change').style.display = 'block';
+    document.getElementById('checkout_address').style.display = 'none';
             },
             failure: function () {
             }
@@ -118,19 +151,19 @@
 
     function edit_checkout(id) {
 
-        var edit_checkout_address = document.getElementsByClassName('edit_checkout_address');
-        for (var i = 0; i < edit_checkout_address.length; i++) {
+        let edit_checkout_address = document.getElementsByClassName('edit_checkout_address');
+        for (let i = 0; i < edit_checkout_address.length; i++) {
             edit_checkout_address[i].style.display = 'none';
         }
         document.getElementById('edit_checkout_address-' + id).style.display = 'block'
 
-        var list_checkout_address = document.getElementsByClassName('list_checkout_address');
-        for (var i = 0; i < list_checkout_address.length; i++) {
+        let list_checkout_address = document.getElementsByClassName('list_checkout_address');
+        for (let i = 0; i < list_checkout_address.length; i++) {
             list_checkout_address[i].style.display = 'block';
         }
         document.getElementById('list_checkout_address-' + id).style.display = 'none'
-        var delivery_address_btn = document.getElementsByClassName('delivery_address_btn');
-        for (var i = 0; i < delivery_address_btn.length; i++) {
+        let delivery_address_btn = document.getElementsByClassName('delivery_address_btn');
+        for (let i = 0; i < delivery_address_btn.length; i++) {
             delivery_address_btn[i].style.display = 'none';
         }
     }
@@ -141,16 +174,16 @@
     }
 
     function edit_checkout_address_form(id) {
-        var name = $('#address_name-' + id).val();
-        var phone_no = $('#address_phone_no-' + id).val();
-        var pincode = $('#address_pincode-' + id).val();
-        var locality = $('#address_locality-' + id).val();
-        var address = $('#address_address-' + id).val();
-        var city_district_town = $('#address_city_district_town-' + id).val();
-        var state = $('#address_state-' + id + ' option:selected').val();
-        var landmark = $('#address_landmark-' + id).val();
-        var alt_phone_no = $('#address_alt_phone_no-' + id).val();
-        var address_type = $(".edit_addresstype-" + id + ":checked").val();
+        let name = $('#address_name-' + id).val();
+        let phone_no = $('#address_phone_no-' + id).val();
+        let pincode = $('#address_pincode-' + id).val();
+        let locality = $('#address_locality-' + id).val();
+        let address = $('#address_address-' + id).val();
+        let city_district_town = $('#address_city_district_town-' + id).val();
+        let state = $('#address_state-' + id + ' option:selected').val();
+        let landmark = $('#address_landmark-' + id).val();
+        let alt_phone_no = $('#address_alt_phone_no-' + id).val();
+        let address_type = $(".edit_addresstype-" + id + ":checked").val();
 
         $.ajax({
             type: "POST",
@@ -208,17 +241,17 @@
     }
 
     function add_checkout_new_address_form() {
-        var user_id = $('#user_id').val();
-        var name = $('#address_name').val();
-        var phone_no = $('#address_phone_no').val();
-        var pincode = $('#address_pincode').val();
-        var locality = $('#address_locality').val();
-        var address = $('#address_address').val();
-        var city_district_town = $('#address_city_district_town').val();
-        var state = $('#address_state option:selected').val();
-        var landmark = $('#address_landmark').val();
-        var alt_phone_no = $('#address_alt_phone_no').val();
-        var address_type = $(".edit_addresstype:checked").val();
+        let user_id = $('#user_id').val();
+        let name = $('#address_name').val();
+        let phone_no = $('#address_phone_no').val();
+        let pincode = $('#address_pincode').val();
+        let locality = $('#address_locality').val();
+        let address = $('#address_address').val();
+        let city_district_town = $('#address_city_district_town').val();
+        let state = $('#address_state option:selected').val();
+        let landmark = $('#address_landmark').val();
+        let alt_phone_no = $('#address_alt_phone_no').val();
+        let address_type = $(".edit_addresstype:checked").val();
         $.ajax({
             type: "POST",
             url: "{% url 'cart:add_checkout_new_address_form' %}",
@@ -304,7 +337,7 @@
 
 
     function order_submit() {
-        var address_id = $(".check_checkout_address:checked").val();
+        let address_id = $(".check_checkout_address:checked").val();
         Swal.fire({
             title: 'Are you sure?',
             text: "You Continue Payment procedure",
@@ -330,6 +363,8 @@
                     success: function (res) {
                         $('#totel_payment_price').text(res.totel_payment_price);
                         $('#totel_items_checkout_responce').text(res.totel_items_checkout);
+                        $('#product_order_session_id').val(res.product_order_id);
+                        $('#razerpay_order_id').val(res.order_id);
                         document.getElementById('login_Change').style.display = 'none';
                         document.getElementById('order_summery_check').style.display = 'block';
                         document.getElementById('check_checkout_address_check_Change').style.display = 'none';
@@ -354,7 +389,7 @@
     function Coupon() {
         document.getElementById('Coupon').style.display = 'block';
         $('#Coupon_submit').on('submit', function (e) {
-            var Couponcode = $('#Couponcode').val();
+            let Couponcode = $('#Couponcode').val();
             e.preventDefault();
             $.ajax({
                 type: "POST",
@@ -419,10 +454,13 @@
 
     function cash_on_delivery() {
         document.getElementById('cash_on_delivery_method_verify').style.display = 'block'
+
+
         $.ajax({
             type: "POST",
             url: "{% url 'payment:cash_on_delivery_code_genarator' %}",
             data: {
+
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 dataType: "json",
             },
@@ -462,11 +500,19 @@
         });
     }
 
+
+    function cancel_cash_on_delivery_method() {
+        document.getElementById('cash_on_delivery_method_verify').style.display = 'none';
+        document.getElementById('cash_on_delivery_id').removeAttribute('disabled');
+
+    }
+
     function CONFRIME_ORDER() {
-        var try_code = $("#try_code").val();
-        var test_code = $("#cash_on_delivery_code_genarator_input").val();
+        let try_code = $("#try_code").val();
+        let test_code = $("#cash_on_delivery_code_genarator_input").val();
+        let product_order_session_id = $('#product_order_session_id').val();
         if (try_code === test_code) {
-            location.href = '{% url "payment:cash_on_delivery_order_confrim" %}';
+            window.location.href = "http://{{callback_url}}/payments/cash-on-delivery-order-confrim/" + product_order_session_id + "/"
         } else {
             $("#error_massage").text('Incurrect text entered. Please try again.');
             // messages timeout for 10 sec 
@@ -479,8 +525,129 @@
 
 
 
+    let options = {
+        "key": "{{RAZORPAY_KEY_ID}}",
+        "amount": "{% widthratio totel_price 1 100 %}",
+        "currency": "INR",
+        "name": "Football-Frenzy",
+        "description": "Test Transaction",
+        "image": "{% static 'user/images/logo/logo.png' %}",
+        // "order_id": "{{order_id}}",
+        // 'callback_url' : 'http://{{callback_url}}/payments/razorpay-payment/'+product_order_session_id+'/',
+        // "handler": function (response) {
+        //     alert(response.razorpay_payment_id);
+        //     alert(response.razorpay_order_id);
+        //     alert(response.razorpay_signature);
+        // },
+        "prefill": {
+            "name": "{{user_address.name}}",
+            "email": "{{request.user.email}}",
+            "contact": "{{request.user.phone_no}}"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
 
+    // rzp1.on('payment.failed', function (response) {
+    //     alert(response.error.code);
+    //     alert(response.error.description);
+    //     alert(response.error.source);
+    //     alert(response.error.step);
+    //     alert(response.error.reason);
+    //     alert(response.error.metadata.order_id);
+    //     alert(response.error.metadata.payment_id);
+    // });
+
+    function razepay_payment() {
+        let product_order_session_id = document.getElementById('product_order_session_id').value;
+        let order_id = document.getElementById('razerpay_order_id').value;
+
+
+        console.log(product_order_session_id)
+        options['callback_url'] = 'http://{{callback_url}}/payments/razorpay-payment/' + product_order_session_id + '/';
+        options['order_id'] = order_id
+
+        let rzp1 = new Razorpay(options);
+
+        rzp1.open();
+    }
 </script>
+
+
+<script
+    src="https://www.paypal.com/sdk/js?client-id=AUXhP_4W2hDQznBGU7pIfDJ3D-tDDQt3dcD6MQUE94IhO71JIRHNYLHn99Fk2IuWa-4LmIAuFbGkAUd3"></script>
+
+<script>
+    // Render the PayPal button into #paypal-button-container
+    let a = "{{totel_price}}"
+    console.log(a)
+    inr = a / 75
+    inrs = inr.toFixed(2)
+    paypal.Buttons({
+        // Set up the transaction
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: inrs
+                    }
+                }]
+            });
+        },
+
+        // Finalize the transaction
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (orderData) {
+                // Successful capture! For demo purposes:
+                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                let transaction = orderData.purchase_units[0].payments.captures[0];
+                let payer = orderData.payer.payer_id
+                // alert('Transaction ' + transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+
+                // Replace the above to show a success message within this page, e.g.
+                // const element = document.getElementById('paypal-button-container');
+                // element.innerHTML = '';
+                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                // Or go to another URL:  actions.redirect('thank_you.html');
+                let product_order_session_id = document.getElementById('product_order_session_id').value;
+
+                let transaction_id = transaction.id
+                let transaction_status = transaction.status
+                let orderData_id = orderData.id
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'payment:paypal'  %}",
+                    data: {
+                        product_order_session_id,
+                        transaction_id,
+                        transaction_status,
+                        orderData_id,
+                        payer,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        dataType: "json",
+                    },
+                    beforeSend: function (
+                    ) {
+                    },
+                    success: function (res) {
+                        let order_id = res.order_id
+                        let payment_id = res.payment_id
+                        let order_status_id = res.order_status_id
+                        window.location.href = 'http://{{callback_url}}/payments/order-placed/' + order_id + '/' + payment_id + '/' + order_status_id + ''
+                    },
+                    failure: function () {
+                    }
+                });
+
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
+
 
 
 {% endblock %}

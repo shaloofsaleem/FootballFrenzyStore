@@ -2,6 +2,7 @@ from django.shortcuts import render
 from accounts.views import *
 from .forms import *
 from .Admin_views import  *
+
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
@@ -311,15 +312,20 @@ def View_Color(request):
     context = {"color":color}
     return render(request, "admin/category/admin-color_list.html", context)
 
-def View_Order(request):
-    order = Order.objects.all()
-    print(order)
-    context = {"order": order}
-    return render(request, "admin/cart/order list.html", context)
+
 def View_OrderStuts(request):
     orders = OrderStatus.objects.all()
-    context = {"orders": orders}
-    return render(request, "",context)
+    order = Order.objects.all()
+    payment=Payment.objects.all()
+    
+    
+    context = {
+        "orders": orders,
+        'order': order,
+        "payment" : payment
+        
+    }
+    return render(request, "admin/cart/order-Status-list.html",context)
 def View_Cart(request):
     cart = Cart.objects.all()
     print(cart)

@@ -12,7 +12,7 @@ urlpatterns = [
     path('logout',views.Adminlogout,name='logout'), 
     path('category/',views.View_Category,name="category"),
     path('carts/',views.View_Cart,name="carts"),
-    path('Order/',views.View_Order,name="Order"),
+     path('Orders/',views.View_OrderStuts,name="Orders"),
     # path('i/',views.View_Order,name="invoice"),
     path('quanty/',views.View_Quantity,name="quanty"),
     path('subprodt/',views.View_Subprdt,name="subprodt"),
@@ -45,5 +45,6 @@ urlpatterns = [
     path('brandelete/<int:id>',views.Brand_delete,name="branddelete"),
     path('coldelete/<int:id>',views.Color_delete,name="coldelete"),
     path('sizdelete/<int:id>',views.Size_delete,name="sizdelete"),
+    
     
 ] 

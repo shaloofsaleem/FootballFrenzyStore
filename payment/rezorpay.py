@@ -1,4 +1,3 @@
-
 from django.http import HttpResponse
 from django.shortcuts import render,get_object_or_404,redirect
 from cart.models import *
@@ -107,10 +106,3 @@ def razorpay_payment(request,*args,**kwargs):
                 return render(request,'user/status/failed.html')
         else:
             return render(request,'user/status/failed.html')
-        
-def success(request):
-    order_id=request.GET.get('order_id')
-    cart=Cart.objects.get(payment_order_id=order_id)
-    cart.is_paid=True
-    cart.save()
-    return HttpResponse('payment Sucess')

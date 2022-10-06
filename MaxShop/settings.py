@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*qsmrw4p!u90ra#_2)9u$-zhksxaz!tbm05)t2yqqbj(u+%m_r'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -161,18 +161,18 @@ except Exception as e:
     pass
 
 
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'shalushaz01@gmail.com'
-EMAIL_HOST_PASSWORD = 'fvcbffiwbwyyubph'
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
-ACCOUNT_SID='AC6fa38894ebe040c0b58a11e12cdf0ef1'
-AUTH_TOKEN='54860ca570fa6bcbd215c3e1bf4a036e'
-SERVICES_ID='VA88776726838a15a82ba3c718c73bf5dc'
+ACCOUNT_SID=os.environ.get("ACCOUNT_SID")
+AUTH_TOKEN=os.environ.get("AUTH_TOKEN")
+SERVICES_ID= os.environ.get("SERVICES_ID")
 
 
 # Payments
 
-RAZORPAY_KEY_ID='rzp_test_SakHQVUVi7xj6k'
-RAZORPAY_SECRET_KEY='Q3LykbU5KJ1UQZ1PbmDlFp88'
+RAZORPAY_KEY_ID=os.environ.get("RAZORPAY_KEY_ID")
+RAZORPAY_SECRET_KEY= os.environ.get("RAZORPAY_KEY_SECRET")

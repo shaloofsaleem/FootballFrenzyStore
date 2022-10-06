@@ -1,11 +1,11 @@
-from multiprocessing import context
 from django.shortcuts import render,redirect
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from accounts.views import *
-
+from django.contrib.auth import get_user_model
 from category.models import *
 from cart.models import *
+from payment.models import *
 
 
 #Create your views here.
@@ -13,8 +13,21 @@ from cart.models import *
 @never_cache
 def Adminhome(request):
     order= Order.objects.filter(is_active=True).count()
+    sale = Payment.objects.filter(payment_complete_status=True)
+    complete=Payment.objects.filter(payment_complete_status=True).count()
+    shiping=OrderStatus.objects.filter(Shipped=True).count()
+    User = get_user_model()
+    user= User.objects.filter(is_active=True).count()
+    total_sales=0
+    for i in sale:
+        total_sales+= i.payment_price
+        print(total_sales)
     context={
-        'ordercount':order
+        'ordercount':order,
+        'total_sales':total_sales,
+        'complete': complete,
+        'shiping' :shiping,
+        'user':user,
     }
     return render(request,'admin/admin-home.html', context)
 @never_cache

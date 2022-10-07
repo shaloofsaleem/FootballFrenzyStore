@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'payment',
     'super_admin',
     'widget_tweaks',
+    'storages',
     
 ]
 AUTH_USER_MODEL = 'accounts.User'
@@ -89,15 +90,11 @@ WSGI_APPLICATION = 'MaxShop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'footballfrenzy',
-        'USER': 'footballuser',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+ 
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -180,3 +177,15 @@ SERVICES_ID= os.environ.get("SERVICES_ID")
 
 RAZORPAY_KEY_ID=os.environ.get("RAZORPAY_KEY_ID")
 RAZORPAY_SECRET_KEY= os.environ.get("RAZORPAY_KEY_SECRET")
+
+AWS_ACCESS_KEY_ID = 'AKIA3JUKWWZQUO4R4PDB'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'brocamp'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = 'static'
+
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

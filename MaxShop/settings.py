@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG')
 
@@ -92,10 +93,10 @@ WSGI_APPLICATION = 'MaxShop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'footballfrenzy',
-        'USER': 'footballuser',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
+        'NAME':config('DB_NAME') ,
+        'USER': config('DB_USER'),
+        'PASSWORD':config('DB_PASSWORD'),
+        'HOST': config ('DB_HOST'),
         'PORT': '5432',
     }
 }

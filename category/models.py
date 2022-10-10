@@ -106,7 +106,7 @@ class Brand(models.Model):
 class Color(models.Model):
     title               =   models.CharField(max_length=300)
     color_code          =  models.CharField(max_length=200,)
-    slug                =   AutoSlugField(populate_from='title',max_length=255,unique=True,null=True, blank=True,)
+    slug                =   AutoSlugField(populate_from='title',unique_with=('color_code'),max_length=255,unique=True,null=True)
     discription         =   models.TextField(blank=True,null=True)
     is_active           =   models.BooleanField(default=True)
     # created_date        =   models.DateTimeField(auto_now_add=True)
@@ -118,13 +118,13 @@ class Color(models.Model):
     # record_status       =   models.CharField(max_length=255,default='created')
 
 
-    def __str__(self):
-        return f"{self.title} {self.color_code}"
+    # def __str__(self):
+    #     return f"{self.title} {self.color_code}"
 
     class Meta:
         verbose_name_plural = 'color'   
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title,self.color_code)
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.slug:
+    #         self.slug = slugify(self.title,self.color_code)
+    #     return super().save(*args, **kwargs)

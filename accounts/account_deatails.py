@@ -8,15 +8,17 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='accounts:login')
 def accounts(request,*args,**kwrgs):
-    user_infermations=request.user
-    user_address_form=UserAddressForm()
-    context={
-        'user_infermations':user_infermations,
-        'user_address_form':user_address_form,
-        'user_address':UserAddress.objects.filter(user=user_infermations)
-    }
-    return render(request,'user/account-deatails/account-deatails.html',context)
-
+    try:
+        user_infermations=request.user
+        user_address_form=UserAddressForm()
+        context={
+            'user_infermations':user_infermations,
+            'user_address_form':user_address_form,
+            'user_address':UserAddress.objects.filter(user=user_infermations)
+        }
+        return render(request,'user/account-deatails/account-deatails.html',context)
+    except:
+        return render(request,'user/status/404.html')
 
 def user_infermations(request,*args,**kwrgs):
     try:

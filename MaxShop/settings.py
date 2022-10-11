@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-from decouple import config
 # from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,11 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-
+SECRET_KEY = 'django-insecure-*qsmrw4p!u90ra#_2)9u$-zhksxaz!tbm05)t2yqqbj(u+%m_r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -93,10 +91,10 @@ WSGI_APPLICATION = 'MaxShop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':config('DB_NAME') ,
-        'USER': config('DB_USER'),
-        'PASSWORD':config('DB_PASSWORD'),
-        'HOST': config ('DB_HOST'),
+        'NAME': 'footballfrenzy',
+        'USER': 'footballuser',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -168,24 +166,27 @@ except Exception as e:
     pass
 
 
-EMAIL_HOST = config("EMAIL_HOST")
-EMAIL_USE_TLS = True
+EMAIL_HOST='smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER='shalushaz01@gmail.com'
+EMAIL_HOST_PASSWORD='fvcbffiwbwyyubph'
+# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
-ACCOUNT_SID=config("ACCOUNT_SID")
-AUTH_TOKEN=config("AUTH_TOKEN")
-SERVICES_ID= config("SERVICES_ID")
-
+# ACCOUNT_SID=os.environ.get("ACCOUNT_SID")
+# AUTH_TOKEN=os.environ.get("AUTH_TOKEN")
+# SERVICES_ID= os.environ.get("SERVICES_ID")
+ACCOUNT_SID='AC6fa38894ebe040c0b58a11e12cdf0ef1'
+AUTH_TOKEN='54860ca570fa6bcbd215c3e1bf4a036e'
+SERVICES_ID='VA88776726838a15a82ba3c718c73bf5dc'
 
 # Payments
 
-RAZORPAY_KEY_ID= config('RAZORPAY_KEY_ID')
-RAZORPAY_SECRET_KEY= config('RAZORPAY_SECRET_KEY')
+RAZORPAY_KEY_ID= 'rzp_test_SakHQVUVi7xj6k'
+RAZORPAY_SECRET_KEY= 'Q3LykbU5KJ1UQZ1PbmDlFp88'
 
-AWS_ACCESS_KEY_ID = ('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = ('AWS_SECRET_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = 'AKIA3JUKWWZQUO4R4PDB'
+AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'brocamp'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {

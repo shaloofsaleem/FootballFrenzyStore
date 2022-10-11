@@ -1,7 +1,6 @@
 
 from datetime import datetime
 from django.conf import settings
-
 from twilio.rest import Client
 from django.http import JsonResponse
 
@@ -59,29 +58,31 @@ def verify_otp(mobile,otp):
     
     
 def otp_verify_code(request,phone_no,uid,verification_user):
-    if  request.method == 'POST':
-        otp = request.POST['otp']
-        verify=verify_otp(phone_no,otp)
-        if  verify: 
-            user=User.objects.get(pk=uid)
-            user.is_active = True
-            user.save()
-            user_verifcation=VerificationUser.objects.get(pk=verification_user)
-            user_verifcation.otp=otp
-            user_verifcation.otp_verification=True
-            user_verifcation.save()
-            login(request,user)
-            return redirect('product:landing_page')
-        else:
-            messages.error(request,'invalid otp recheck')
-            return redirect('accounts:registration')
-    context={
-        'phone_no':phone_no,
-        'uid':uid,
-        'verification_user':verification_user
-    }
-    return render(request,'user/accounts/otp-verify.html',context)
-
+    try:
+        if  request.method == 'POST':
+            otp = request.POST['otp']
+            verify=verify_otp(phone_no,otp)
+            if  verify: 
+                user=User.objects.get(pk=uid)
+                user.is_active = True
+                user.save()
+                user_verifcation=VerificationUser.objects.get(pk=verification_user)
+                user_verifcation.otp=otp
+                user_verifcation.otp_verification=True
+                user_verifcation.save()
+                login(request,user)
+                return redirect('product:landing_page')
+            else:
+                messages.error(request,'invalid otp recheck')
+                return redirect('accounts:registration')
+        context={
+            'phone_no':phone_no,
+            'uid':uid,
+            'verification_user':verification_user
+        }
+        return render(request,'user/accounts/otp-verify.html',context)
+    except:
+        return render(request,'user/status/404.html')
 
 
 def resent_otp(request):

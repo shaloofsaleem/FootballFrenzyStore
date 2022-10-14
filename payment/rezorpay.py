@@ -106,3 +106,4 @@ def razorpay_payment(request,*args,**kwargs):
                 return render(request,'user/status/failed.html')
         else:
             return render(request,'user/status/failed.html')
+

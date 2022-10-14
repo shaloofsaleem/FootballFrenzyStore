@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.shortcuts import render,get_object_or_404,redirect
 from accounts.models import User,UserAddress
 from .models import *
@@ -6,6 +5,16 @@ from django.http import JsonResponse
 from django.db.models import Sum
 from django.utils import timezone
 from django.template.loader import render_to_string
+
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.core.cache import cache
+CACHE_TTL = getattr(settings ,'CACHE_TTL' , DEFAULT_TIMEOUT)
+import base64
+
+from django.conf import settings
+import razorpay
+client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
+
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -17,7 +26,7 @@ def get_client_ip(request):
 
 def continue_order(request,*args,**kwargs):        
     address_id = request.POST.get('address_id', None)
-    if 'order_id' in request.session:
+    if 'order_id' in  request.session:
         order=get_object_or_404(Order,pk=request.session['order_id'])
         order.user=request.user
         order.delivery_address=get_object_or_404(UserAddress,pk=address_id)
@@ -59,17 +68,30 @@ def continue_order(request,*args,**kwargs):
         order.totel_unit_price=totel_unit_price
         order.totel_offer_price=totel_offer_price
         order.totel_payment_price=order.totel_offer_price
+        order.ip=get_client_ip(request)
         order.offer_savings_price = totel_unit_price-totel_offer_price
         order.order_status='pending'
         order.save()
         for i in products:
             order.products.add(i.id)
             
+            
     cart_checkout_products=products.aggregate(Sum('product_qty'))
     totel_items_checkout=cart_checkout_products['product_qty__sum']
     totel_payment_price=order.totel_payment_price
     request.session['order_id']=order.id
-    return JsonResponse({'data':True,'totel_items_checkout':totel_items_checkout,'totel_payment_price':totel_payment_price})
+    product_order_id=str(order.id)
+    enc = base64.b64encode(product_order_id.encode('ascii'))
+    enc=enc.decode()
+    data = {
+    "amount": float(order.totel_payment_price*100),
+    "currency": "INR",
+    "receipt": order.orders_id,
+    "payment_capture": "0"      
+    }
+    order_id = client.order.create(data)
+    return JsonResponse({'data':True,
+                         'totel_items_checkout':totel_items_checkout,'totel_payment_price':totel_payment_price,'product_order_id':enc,'order_id':order_id['id']})
 
 
 
@@ -108,4 +130,6 @@ def coupon(request,*args,**kwargs):
         status=False
     template =render_to_string('user/order/order-totel.html',{'order':order})
     return JsonResponse({'data':status,'msg':msg,'template':template,})
+    
+    
     

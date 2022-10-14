@@ -166,10 +166,11 @@ except Exception as e:
     pass
 
 
-EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER='shalushaz01@gmail.com'
-EMAIL_HOST_PASSWORD='fvcbffiwbwyyubph'
+EMAIL_HOST_PASSWORD='ojtfunoympbapwyp'
 # EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 # EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
@@ -177,7 +178,7 @@ EMAIL_HOST_PASSWORD='fvcbffiwbwyyubph'
 # AUTH_TOKEN=os.environ.get("AUTH_TOKEN")
 # SERVICES_ID= os.environ.get("SERVICES_ID")
 ACCOUNT_SID='AC6fa38894ebe040c0b58a11e12cdf0ef1'
-AUTH_TOKEN='54860ca570fa6bcbd215c3e1bf4a036e'
+AUTH_TOKEN='e92a498b34909c26443d5e16a5db6cb8'
 SERVICES_ID='VA88776726838a15a82ba3c718c73bf5dc'
 
 # Payments

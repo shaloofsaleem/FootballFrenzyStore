@@ -1,22 +1,22 @@
-import base64
+import json
 from django.shortcuts import render,get_object_or_404,redirect
 from accounts.models import User,UserAddress
 from .models import Cart, Order
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
+
 from django.conf import settings
 import razorpay
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_SECRET_KEY))
 from django.contrib.sites.shortcuts import get_current_site
 
+import base64
 
 
-
-
-# @login_required(login_url='accounts:login')
+@login_required(login_url='accounts:login')
 def checkout(request,*args,**kwargs):    
     
     
@@ -76,17 +76,14 @@ def checkout(request,*args,**kwargs):
         else:
             return redirect('cart:cart')
     except:
-        # return HttpResponse('sorry')
-         return render(request,'user/status/404.html') 
+        return render(request,'user/status/404.html')
     
 
-    
 def delivery_address(request,*args,**kwargs):
     address_id = request.POST.get('id', None)
     checkout_address=get_object_or_404(UserAddress,pk=address_id)
     template =render_to_string('user/checkout/checkout-delivery-address.html',{'delivery_address':checkout_address})
     return JsonResponse({'data':template}) 
-
 
 
 def edit_checkout_address(request,*args,**kwrgs):
@@ -146,6 +143,7 @@ def delete_checkout_items(request,*args,**kwrgs):
         savings=0
     request.session['length_product']=length_product
     return JsonResponse({'data':status,'length_product':length_product,'totel_price':totel_price,'savings':savings,'Totel_unit_price':Totel_unit_price})
+
 
 
 def add_checkout_new_address_form(request,*args,**kwrgs):

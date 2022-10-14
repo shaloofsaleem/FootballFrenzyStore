@@ -55,10 +55,10 @@
           </div>
           <div class="card-wrap">
             <div class="card-header">
-              <h4>Balance</h4>
+              <h4>Total_Product</h4>
             </div>
             <div class="card-body">
-              $187,13
+              {{product_count}}
             </div>
           </div>
         </div>
@@ -89,6 +89,44 @@
         </div>
         <div class="card-body">
           <canvas id="myChart3"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header">
+          <h4>Invoices</h4>
+          <div class="card-header-action">
+            <a href="#" class="btn btn-danger">View More <i class="fas fa-chevron-right"></i></a>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive table-invoice">
+            <table class="table table-striped">
+              <tr>
+                <th>Invoice ID</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th>Due Date</th>
+                <th>Action</th>
+              </tr>
+              
+              {% for i in invoice %}
+                
+              
+                
+              <tr>
+                <td><a href="#">INV-{{i.order}}</a></td>
+                <td class="font-weight-600">{{i.user}}</td>
+                <td><div class="badge badge-warning">{{i.payment_method}}</div></td>
+                <td>{{i.payment_date}}</td>
+                <td>
+                  <a href="#" class="btn btn-primary">Detail</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
         </div>
       </div>
     </div>

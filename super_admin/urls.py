@@ -6,12 +6,15 @@ from .import Admin_views
 urlpatterns = [
     path('adminn',views.Adminlogin,name='adminn'),
     path('user/',Admin_views.Users,name="user"),
+    path('invoice/',views.View_invoice,name="invoice"),
+    
+    # path('user/search/',Admin_views.UsersSearch,name="user-search"),
     path('user-management/block/<str:pk>/', Admin_views.block_user , name='block-user'),
     path('user-management/unblock/<str:pk>/', Admin_views.unblock_user , name='unblock-user'),
     path('',Admin_views.Adminhome,name='home'),
     path('logout',views.Adminlogout,name='logout'), 
     path('category/',views.View_Category,name="category"),
-    path('carts/',views.View_Cart,name="carts"),
+    # path('carts/',views.View_Cart,name="carts"),
      path('Orders/',views.View_OrderStuts,name="Orders"),
     # path('i/',views.View_Order,name="invoice"),
     path('quanty/',views.View_Quantity,name="quanty"),

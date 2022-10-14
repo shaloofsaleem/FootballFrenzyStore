@@ -41,6 +41,7 @@
                     <th>Action</th>
                   </tr>
                   {% for user in user %}
+                  {% if not user.is_admin %}
                   <tr>
                     <td class="p-0 text-center">
                       <div class="custom-checkbox custom-control">
@@ -79,6 +80,7 @@
               {% endif %}
                     </td>
                   </tr>
+                  {% endif %}
                   {% endfor %}
                 </table>
               </div>

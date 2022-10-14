@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from accounts.views import *
 from django.contrib.auth import get_user_model
 from category.models import *
@@ -9,10 +10,11 @@ from payment.models import *
 
 
 #Create your views here.
-@login_required(login_url='home')    
 @never_cache
+@login_required(login_url= 'adminn')
 def Adminhome(request):
     order= Order.objects.filter(is_active=True).count()
+    product_count = Product.objects.all().count()
     sale = Payment.objects.filter(payment_complete_status=True)
     complete=Payment.objects.filter(payment_complete_status=True).count()
     shiping=OrderStatus.objects.filter(Shipped=True).count()
@@ -28,20 +30,34 @@ def Adminhome(request):
         'complete': complete,
         'shiping' :shiping,
         'user':user,
+        'product_count':product_count
     }
     return render(request,'admin/admin-home.html', context)
 @never_cache
+@staff_member_required
+@login_required(login_url= 'adminn')
 def Users(request):
-    if request.user.is_admin:
-        search_key = request.GET.get('key')  if request.GET.get('key') != None  else ''
-        users = User.objects.filter(email__istartswith=search_key,)
-        return render(request, 'admin/user.html', {'user': users})
+    Users = get_user_model()
+    if 'key' in request.GET:
+        key = request.GET['key']
+        users = Users.objects.filter(email__icontains=key)
     else:
-        return redirect('User')  
+        users = Users.objects.all()
+    return render(request, 'admin/user.html', {'user': users})
+
+@staff_member_required
+@login_required(login_url= 'adminn')
+def UsersSearch(request): 
+    if 'key' in request.GET:
+        key = request.GET['key']
+        Users = get_user_model()
+        users = Users.objects.all(email__icontains=key)
+    else:
+        users=None
+    return render(request, 'admin/user.html', {'user': users})
 
 
-@login_required(login_url= 'admin-login')
-
+@login_required(login_url= 'adminn')
 def block_user(request, pk):
     user = User.objects.get(pk = pk)
     user.is_active = False
@@ -49,7 +65,7 @@ def block_user(request, pk):
     return redirect(Users)
 
 
-@login_required(login_url= 'admin-login')
+@login_required(login_url= 'adminn')
 def unblock_user(request, pk):
     user = User.objects.get(pk = pk)
     user.is_active = True

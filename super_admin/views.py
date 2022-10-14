@@ -326,8 +326,7 @@ def View_OrderStuts(request):
         
     }
     return render(request, "admin/cart/order-Status-list.html",context)
-def View_Cart(request):
-    cart = Cart.objects.all()
-    print(cart)
-    context = {"cart": cart}
-    return render(request, "",context)
+def View_invoice(request):
+    invo= Payment.objects.all()
+    context = {"invoice": invo}
+    return render(request, 'admin/admin-home.html',context)

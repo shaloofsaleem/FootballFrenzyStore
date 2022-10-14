@@ -1,3 +1,4 @@
+from ast import Not
 from django.utils import timezone
 from django.shortcuts import render,get_object_or_404
 from django.http import JsonResponse
@@ -81,7 +82,8 @@ def cart(request,*args,**kwargs):
         if request.user.is_authenticated:                
             cart_products=Cart.objects.filter(user=request.user).filter(is_active=True)  
             cart_data={}
-            if cart_products != None:
+            
+            if len(cart_products) != 0:
                 for i in cart_products:
                     cart_product=ProductQuantity.objects.get(pk=i.product_quantity.id)
                     stock=cart_product.stock
@@ -95,7 +97,7 @@ def cart(request,*args,**kwargs):
                 data=cart_products.aggregate(Sum('totel_qty_price'),Sum('product_qty'),Sum('totel_unit_price'))
                 length_product=data['product_qty__sum']
                 totel_price=float(data['totel_qty_price__sum'])
-                Totel_unit_price=float(data['totel_unit_price__sum'])
+                Totel_unit_price=float(data['totel_unit_price__sum'])  
                 savings=float(Totel_unit_price)-totel_price
                 request.session['length_product']=length_product
                 status=True
@@ -114,8 +116,6 @@ def cart(request,*args,**kwargs):
                 for key in list(cart_data):
                     length_product += int(cart_data[key]['product_qty'])
                     count_qty =int(cart_data[key]['product_qty'])
-                    # price = float(cart_data[key]['price'])*count_qty
-                    # cart_data[key].update({'sub_totel_price':price})
                     cart_product=ProductQuantity.objects.get(pk=key)
                     cart_data[key].update({'unit_price':float(cart_product.product.product.unit_price)})
                     cart_data[key].update({'cart_product':cart_product.product.product.product_name})
@@ -147,16 +147,12 @@ def cart(request,*args,**kwargs):
                 totel_price=00
                 savings=00
                 length_product=00
+        return render(request,'user/cart/cart-section.html',{ 
+                    'data':cart_data,'totel_price':totel_price,'status':status,'length_product':length_product,'savings':savings})
     except:
-        status=False
-        cart_data=False
-        totel_price=00
-        savings=00
-        length_product=00
+        return render(request,'user/status/404.html')
         
-    return render(request,'user/cart/cart-section.html',{ 
-        'data':cart_data,'totel_price':totel_price,'status':status,'length_product':length_product,'savings':savings})
-
+    
 
 def price_change(request,*args,**kwargs):
     qty = request.POST.get('qty', None)
@@ -213,7 +209,6 @@ def deleted_cart_items(request,*args,**kwargs):
         else:
             cart_data=request.session['cartdata']
             del cart_data[cart_id]
-            print(cart_data)
             length_product=0
             totel_price=0
             Totel_unit_price=0
@@ -253,4 +248,3 @@ def size_change(request,*args,**kwargs):
     request.session['cartdata']=cart_data
     template =render_to_string('user/cart/quanity.html',{'data':stock,'key':session_id})
     return JsonResponse({'data':template})
-

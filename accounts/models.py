@@ -5,7 +5,7 @@ from .manager import UserManager
 
 class User(AbstractBaseUser):
     email               = models.EmailField(max_length=100,unique=True)
-    phone_no            = models.IntegerField(null=False,blank=False)
+    phone_no            = models.CharField(max_length=50)
     first_name          = models.CharField(max_length=50)
     last_name           = models.CharField(max_length=50)
     gender              = models.CharField(max_length=20,null=True,blank=True)
@@ -49,7 +49,7 @@ class VerificationUser(models.Model):
 class UserAddress(models.Model):
     user                = models.ForeignKey(User,on_delete=models.CASCADE,related_name='user_address')
     name                = models.CharField(max_length=250)
-    phone_no            = models.IntegerField()
+    phone_no            = models.CharField(max_length=50)
     pincode             =   models.CharField(max_length=250)
     locality            =   models.CharField(max_length=250)
     address             =   models.TextField()

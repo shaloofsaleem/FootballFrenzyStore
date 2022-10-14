@@ -1,0 +1,116 @@
+{% extends "user/base-layout.html" %}
+{% load static %}
+
+{% block static %}
+
+<style>
+    .order-placed-history{
+        cursor: pointer;
+    }
+    .order-placed-history :hover{
+        border: 1px solid transparent;
+    }
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+
+<!-- ...:::: Start Breadcrumb Section:::... -->
+<div class="breadcrumb-section breadcrumb-bg-color--golden">
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="breadcrumb-title">Orders</h3>
+                    <div class="breadcrumb-nav breadcrumb-nav-color--black breadcrumb-nav-hover-color--golden">
+                        <nav aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="index.html">Home</a></li>
+                                <li><a href="shop-grid-sidebar-left.html">Shop</a></li>
+                                <li class="active" aria-current="page">Cart</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- ...:::: End Breadcrumb Section:::... -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2 col-3">
+            {% include 'user/payment-order/order-deatails/filter.html' %}
+        </div>
+
+        <div class="col-lg-10 col-9">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" onkeyup="search_order()" id="search_order"
+                    placeholder="Search your order here" aria-label="Search" aria-describedby="basic-addon2">
+
+            </div>
+
+            <div id="order_products_list">
+                {% include 'user/payment-order/order-deatails/order-product.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+    function search_order() {
+        let search_order = $('#search_order').val();
+        $.ajax({
+            type: "POST",
+            url: '{% url "payment:search_order" %}',
+            data: {
+                search_order,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: 'json',
+            },
+            success: function (data) {
+                $('#order_products_list').html(data.template)
+                console.log('success')
+            },
+        });
+    }
+
+    $(document).ready(function () {
+            // $(".ajaxLoader").hide();
+      $(".filter-order").on('click', function () {
+        _filterObj={}
+        $(".filter-order").each(function (index, ele) {
+          var _filterVal = $(this).val();
+          var _filterKey = $(this).data('filter');
+          _filterObj[_filterKey] = Array.from(document.querySelectorAll('input[data-filter=' + _filterKey + ']:checked')).map(function (el) {
+            return el.value;
+          });
+        });
+        console.log(_filterObj)
+        $.ajax({
+          url: "{% url 'payment:filter_orders' %}",
+          type : "GET",
+          data: _filterObj,
+          dataType: 'json',
+          beforeSend: function () {
+            // $(".ajaxLoader").show();
+          },
+          success: function (res) {
+    
+            $('#order_products_list').html(res.template)
+            // $(".ajaxLoader").hide();
+          }
+        });
+      });
+    });
+
+
+
+</script>
+
+{% endblock %}
